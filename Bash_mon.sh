@@ -1,6 +1,6 @@
 #! /bin/bash
 # unset any variable which system may be using
-
+#by Mohamed Gamal
 unset RST os architecture kernelrelease internalip externalip nameserver loadaverage
 # The While loop and Getopts to check for options Arguments added to command like # Bash_mon.sh  -v  #bash_mon.sh -i
 #if i is the input it will make iopt=1 , if v vopt=1 else error . 
