@@ -1,6 +1,6 @@
 #! /bin/bash
 # unset any variable which system may be using
-
+#By Mohamed Gamal
 unset tecreset os architecture kernelrelease internalip externalip nameserver loadaverage
 
 while getopts iv name
