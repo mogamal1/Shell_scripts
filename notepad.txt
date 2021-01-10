@@ -1,0 +1,49 @@
+======================================== UNIX ==========================================
+Print $1,$66 if $66 not empty 
+--> gzcat ACC58_20190101.csv.gz | nawk -F, '{print match($66, /[^ ]/) ? $1","$66 : ""}' | nawk -F'\t' 'x$1' | head 
+--> awk 'length($1) == 10'  ,, select only 10 Digits
+--> for i in *\ *; do mv "$i" "${i// /_}"; done   ,,, remove spaces from filenames with underscore
+--> sed -i '1s/^/\;\n/' file ,,, add ; on the first line of file
+--> 0 1 * * * [[ `ps -ef|grep -c 172.28.201.17` -eq 0 ]] && ssh -l root -qfnNTR 7002:10.22.22.5:7002 172.28.201.17 #Sheks#
+--> truss -t lstat64 -v lstat64 ls file_name.txt |||||||||||||| (LINUX) ~# stat file_name.txt 
+========================================== CI ==========================================
+grep -i "^log4j.appender.myAppender.Threshold=DEBUG" *7*s
+========================================  ORA ==========================================
+--> select PARTITION_NAME from user_tab_partitions where table_name ='TX_USERS_FOOTPRINT' and last_analyzed IS NULL;
+--> select * from dba_constraints where CONSTRAINT_NAME= 'SYS_C0011710' order by 1;
+--> alter user CHARGING_INTERFACE identified by ci account unlock ;
+--> SID , ps -ef | grep pmon   listner cd $ORACLE_HOME/network/admin , cat *ora  ;
+--> insert into H_ADJUSTMENTS@AUDIT_DB select * from H_ADJUSTMENTS where ENTRY_DATE between sysdate-60 and sysdate-59 ;
+--> SELECT  name,   ctime,  ptime FROM   sys.user$ WHERE  name ='';
+--> SELECT name, free_mb, total_mb, free_mb/total_mb*100 as percentage  FROM v$asm_diskgroup;
+--> select * from ADM_USERS where lower(NT_ACCOUNT)=lower('V18Mbary') and IS_DELETED=0;
+--> select * from services where rownum <= 5 ;
+--> SHOW PARAMETER AUDIT
+--> SELECT Table1.Col1, Coalesce (Table2.Col2 , 'replace of Null')  from Table1 left outer join Table2 on Table1.Col2=Table2.Col1; 
+--> SELECT  FILE_NAME, BLOCKS, TABLESPACE_NAME FROM DBA_DATA_FILES where TABLESPACE_NAME='SYSAUX';
+--> alter table  "CCAT"."TX_FOOTPRINT_LOG" drop primary key drop index ;
+--> nohup ./startManagedWebLogic.sh ciAppA04_3 http://10.28.180.22:7001&
+==========================================CCAT==========================================
+--> ps -ef|grep tomcat[0-9][0-9]|sed 's/.*\/tomcats\/\(.*\)\/conf.*/\1/'|sort
+--> select * from TX_Connected_users where lower(NT_ACCOUNT)=lower('V18mbary');
+--> grep -i "Server startup" /ccat/tomcats/tomcat??/logs/catalina.out 
+--> CCAT,TX_FOOTPRINT_LOG_PK,UNIQUE,VALID,NORMAL,N,NO,,NO,ID (MISSING IDX)
+======================================== AIR ===========================================
+/var/opt/fds/log
+tail -f /var/opt/fds/statistics/FSC-AirXmlRpc_2.0_A_1-`date +%Y-%m-%d`-0000.stat 
+======================================== SDP ===========================================
+--> ttRepAdmin -dsn sdp_db -receiver -list
+--> ttisql -connstr "DSN=Sdp_db"
+tcpdump -i any -w /home/tcp/20200512.pcap
+/opt/{sdp,air}/SupportTools/bin/
+./failinfo /opt 
+======================================== PowerShell =========================================
+--> dir -Recurse | Select-String -pattern "172.28.37.181"  <==> grep 
+--> foreach($line in Get-Content ..\Cai5.txt) { dir -Recurse | Select-String -pattern $line } <==> for i in $(cat file) ; do grep $i  */*/*....; done 
+--> Measure-Object –Line  <==> wc -l  
+
+=======================================================================================
+ID 11306580
+MAN137
+USB 1091978584
+8920022021977794818
