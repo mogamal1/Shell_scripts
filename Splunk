@@ -1,0 +1,74 @@
+vgcl38vr.dc-dublin.de:8000
+3- open splunk GUI by admin credentials 
+4. settngs --> datainputs
+5. http event collector --> new token
+6. token name = index name_1 and so on_2 ---- must be in small letter
+7.input settings --- source type
+8.app context --> splunk_hhttpinput
+9.preview --- submit
+10. login to deployment backend /opt/SP/splunk/currnet/etc/apps/splunk_httpinput/local/
+vi inputs.conf
+
+then copy the generated token to
+/opt/SP/splunk/current/etc/deployment-apps/TA_HEC_SSL/local/
+then paste them to inputs.conf and adding the index name to eachh token
+
+then reload to push the configuration
+
+------------------------
+
+HEC deployed on 4 servers
+
+from deployment server ---- settings --- forwader management --- apps --- TA_HEC_SSL/local/
+for dublin frwder and ratengin forwarder
+then login to forwarder for both on this bath to confirm 
+the bundle has been pushed successful
+/opt/SP/splunk/hec_current/etc/apps/TA_HEC_SSL/local/
+then check inputs.conf
+after that restart the splunk 
+/opt/SP/splunk/hec_current/bin/splunk restart
+
+================================================================================================
+======================== Search head Cluster configuration =====================================
+
+splunk init shcluster-config -mgmt_uri https://10.128.0.8:8089 -replication_port 9000 -replication_factor 3 -conf_deploy_fetch_url https://10.128.0.11:8089 -secret $7$eGDQrl6M/3aIOsRQWmGIpl9Jkkbc5Jq1kOzBPXDIERikaSs/pXE93qrj -shcluster_label splunk_shc1 ; splunk restart 
+
+splunk init shcluster-config -mgmt_uri https://10.128.0.9:8089 -replication_port 9000 -replication_factor 3 -conf_deploy_fetch_url https://10.128.0.11:8089 -secret $7$eGDQrl6M/3aIOsRQWmGIpl9Jkkbc5Jq1kOzBPXDIERikaSs/pXE93qrj -shcluster_label splunk_shc1 ; splunk restart 
+
+splunk init shcluster-config -mgmt_uri https://10.128.0.10:8089 -replication_port 9000 -replication_factor 3 -conf_deploy_fetch_url https://10.128.0.11:8089 -secret $7$eGDQrl6M/3aIOsRQWmGIpl9Jkkbc5Jq1kOzBPXDIERikaSs/pXE93qrj -shcluster_label splunk_shc1 ; splunk restart 
+
+splunk bootstrap shcluster-captain -servers_list "https://10.128.0.8:8089,https://10.128.0.9:8089,https://10.128.0.10:8089"
+
+splunk resync shcluster-replicated-config
+splunk show shcluster-status 
+
+======================= ADD / REMOVE =========================================
+splunk add shcluster-member -current_member_uri https://10.128.0.8:8089
+
+===================== Indexers Cluster configuration ========================
+
+MASTER
+
+splunk edit cluster-config -mode master -replication_factor 4 -search_factor 3 -cluster_label splunk-clstr1
+
+
+splunk edit cluster-config -mode slave -master_uri https://10.128.0.15:8089 -replication_port 9001 -secret B@ssw0rd ; splunk restart
+
+splunk list cluster-peers
+splunk list cluster-config
+	
+===================================== HF --> INDEXER CLSTR -><- SH CLSTR =======================
+splunk edit cluster-config  -mode searchhead  -master_uri https://10.128.0.15:8089 -secret B@ssw0rd ; splunk restart 
+
+=================================================================================================
+[indexer_discovery:cluster1]
+pass4SymmKey = B@ssw0rd
+master_uri = https://10.128.0.15:8089
+
+[tcpout:group1]
+indexerDiscovery = manager1
+
+[tcpout]
+defaultGroup = group1
+========================= Deployment==============================================================
+splunk set deploy-poll <IP_address/hostname>:<management_port>
