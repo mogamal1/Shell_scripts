@@ -1,0 +1,211 @@
+TERMINAL
+SHELL
+KERNEL 
+HARDWARE (CPU,MEMORY,STORAGE,NIC)
+ 
+
+Physical TERMINAL == CONSOLE 
+
+Virtual TERMINAL  == PTS , TTY 
+
+Console 
+
+CLI == TERMINAL 
+
+GUI ==  ICONS , DESKTOP , Background etc .. 
+
+===============================================================
+$ COMMAND [option] Argument
+
+
+
+
+
+EVERYTHING in linux is A FILE 
+
+VIEW FILE 
+
+EDIT FILE 
+
+==================================================================
+
+/sbin  (root binaries )
+/usr/bin   app1 (ahmed is the owner) 
+/usr/sbin app2  (ahmed is the owner , admins only )
+/sbin (because ahmed is the admin not the root)
+
+username : ahmed (admin) 
+username : mohamed (standard user) (i'm not admin)
+
+
+==================================================================
+logs
+
+ahmed has been logged in my server
+ahmed changed his password
+kernel is corrupted 
+
+
+temp files
+
+/tmp 
+
+/var/tmp 
+==================================================================
+/home
+
+ahmed 
+mohamed
+kareem
+
+
+
+username:mohamed
+password: ******
+
+]$ /home/mohamed
+/home/kareem 
+
+username:root
+password: ****
+
+]# /root 
+==================================================================
+
+Windows OS 
+
+HDD (500 GB) 
+
+connected to my PC using sata / data 
+
+E:/apps/
+E:/games/
+
+mount the disk on E:/ partition 
+===============================================
+
+Linux 
+
+HDD 500 GB 
+
+/dev/sdb 
+
+mount /dev/sdb on /mnt 
+
+/mnt/apps/
+/mnt/games 
+
+/dev/usb ----> mount this device on a location /mnt (mount point) 
+
+==================================================================
+Dir (Directory)  === Folder 
+Print Working Directory  
+
+]$ pwd
+
+/root (root's home)
+/home/username (username's home) 
+
+
+]$ ls == double left click 
+
+ls (list file and directories on my curreny working dir )
+ls -l (more details)
+
+
+change directory 
+
+cd 
+
+cd - === backspace on windows  (return to previod workding dir)
+cd ~ (jumps to my home directory)
+cd .. (jump onestep before your current working DIR )
+cd . (jump to your current working directoy)
+
+cp file.txt file2.txt 
+cp file.txt /root
+cp file.txt /root/file2.txt 
+
+cp -r /home/mohamedgamalfathy/new /root 
+cp -r new /root
+
+Full path and relative path 
+==================================================================
+how to create softline (shortcut)
+
+ln -s <****FULL PATH **** of the file that will make a shortcut from it >   <shortcut name>
+
+cp -r new 
+ln -s /home/mohamed/new /root/sc1 
+
+ 
+ 
+ softlink create anew index (pointer) (inode) for the file 
+ 
+ file --- 5 
+shortcut 6 --> ??  
+
+==================================================================
+
+
+> corrected output
+
+2> error output 
+
+
+2 stand for error 
+1 stand for output 
+
+1>  output
+2>  error        
+&> output + error (write into file)
+
+==================================================================
+Environment variables (constant variables)
+
+
+USERNAME = root
+HOSTNAME = web-server
+EDITOR =  
+
+
+
+
+variables  (changable)
+
+x = 
+mydir
+
+
+/etc/profile 
+ a file responsible for exporting variables 
+ to add avariable just vi /etc/profile and export your variable and then logout and login why ? 
+                                                               because it's executed at user LOGIN 
+                                                               (Globally)
+                                                               
+/etc/bashrc
+a file responsible for exporting variables 
+ to add avariable just vi /etc/profile and export your variable and then logout and login why ? 
+                                                               because it's executed at user LOGIN
+                                                               (Globally)
+~/.bash_profile
+a file responsible for exporting variables 
+ to add avariable just vi /etc/profile and export your variable and then logout and login why ? 
+                                                               because it's executed at user LOGIN 
+                                                               (Per user)
+
+
+  
+script in linux called --> (Bash script) == Batch script (windows server OS )
+
+==================================================================
+[mohamed@hostname]$ 
+
+
+[bash~]$ id
+id=1000(mohamed) gid 1001(admins) 
+
+[bash~]$ id
+id =1005 (Ashraf) gid=1006 (admins) groups= 1333 programers
+==================================================================
+==================================================================
