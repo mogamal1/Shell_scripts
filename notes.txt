@@ -208,4 +208,122 @@ id=1000(mohamed) gid 1001(admins)
 [bash~]$ id
 id =1005 (Ashraf) gid=1006 (admins) groups= 1333 programers
 ==================================================================
+in Windows OS (add standard user to admin group) --> user now become admin
+in Linux OS (add standard user to wheel group in /etc/sudoer) --> user now become sudoer (admin)
+
+
+OR 
+
+
+ create file under /etc/sudoers.d/ 
+ vi ahmed.txt 
+ ahmed ALL(ALL)  ALL  
+ %admins ALL(ALL:ALL) ALL 
+
+
+ how ?
+ 1. uncomment this line 
+ %wheel ALL(ALL)  ALL  
+  add any username to group wheel 
+    now user will be sudoer (admin) 
+ 
+
 ==================================================================
+
+
+su (switch user)
+
+[mohamed@hostname]$ id 
+mohamed 
+[mohamed@hostname]$ su ahmed 
+[mohamed@hostname]$ id 
+ahmed
+==================================================================
+shell 
+/bin/bash
+/sbin/nologin <--- you cannot access the bash shell (terminal)
+/bin/ksh
+/bin/zsh 
+
+
+in linux envionment (windows also)
+
+every application run via USER 
+
+mail app --> mail --> /sbin/nologin 
+ftp app --> ftp  --> /sbin/nologin 
+sayed (/sbin/nlogin)
+1. prevent sayed from accessing the command line 
+
+usermod -s /sbin/nologin sayed  
+
+
+By default we use /sbin/nologin with service accounts 
+
+
+usermod -aG wheel sayed 
+modify sayed's supp groups be appending group wheel
+1 2 3 
+1 2 3 4 
+
+1 (only one gourp) --> usermod -G wheel sayed 
+
+
+to delete account use userdel command 
+to delete account with it's home , mail , etc 
+userdel -rf (force) username 
+
+==================================================================
+drwxr-xr-x. 78 ahmed hr 8192 Jan 31 18:01 /employees_date (has file.txt file2.txt)
+
+d - (file type) (d,-,c,b,l)
+ 
+rwx  (owner's permissions)
+rwx  (group's permissions)
+---  (other's permissions)
+
+
+     
+ahmed  (file owner)
+hr  (group owner)
+8192    bytes (file size) 
+Jan 31 18:01 (creation date / last modified date)
+
+/etc  (directory name)
+
+
+ls -l /employees_date 
+cd /employees_date --- as hr group , you can't change dir (cd ) to this directory (x permission missed)
+
+
+sayed 
+chown sayed /employees_date
+
+--> chown :pr /employees_date
+chown user:group file or dir
+chown sayed:pr /employees_date
+
+==================================================================
+
+
+r-xs
+
+user (owner) --> make any user execute the file as owner 
+ 
+
+-rwsr-xr-x. 1 root root 28K Apr  1  2020 /usr//bin/passwd
+
+
+- (file type)
+rws (owner permission) --> rwxs 
+r-x 
+r-x 
+
+logged in as sayed
+
+passwd 
+new password :
+retype password :  
+
+==================================================================
+
