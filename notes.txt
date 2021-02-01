@@ -327,3 +327,62 @@ retype password :
 
 ==================================================================
 
+
+kernel space vs user space 
+
+kernel space reserved for running OS kernel.
+user space reserved for user (applications,processes .. etc)
+======================
+
+Parent process ---> (fork) Child Process 1  
+                 -->   child Process 2 
+                 
+ PID  (child Process ID )
+ PPID  (parent process ID)
+ 
+ ps -ef (shows PID and PPID )
+ Ps aux (shows ALL info of Processes)
+ 
+ 
+ 
+ ============================================
+ TOP Command  (Task Manager in windows OS )
+ 
+ Shift + m  (sort by Memory Usage)
+ shift + p (sort by CPU usage)
+ c (list full command of the process )
+ 
+ 
+ 
+ 
+ 
+ BIOS (check hardware)
+Bootloader (Table (index) Hard disk) c:/boot (Windows) ; /boot (linux)
+GRUB
+Kernel (core of the OS ) --> extracted in Physical Memory
+systemd (process ID 1 ) (redhat 7,8)  == (redhat 6) initd 
+RUNLEVEL 
+5 (GUI)
+3 (CLI) 
+
+=====================
+loaded (/usr/lib/systemd/system/NetworkManager.service; enabled; vendor preset: disabled)
+
+
+SSH Client Application 
+SecureCrt
+Putty
+============================================================
+
+Public key 
+Private key 
+
+Wireshark Running and collect the date (packets) (Encrypted) , it needs a private key to decrypt it
+
+
+================================================================
+
+
+==================================================================
+==================================================================
+
