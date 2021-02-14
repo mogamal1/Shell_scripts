@@ -404,7 +404,7 @@ web@webserver]$ ssh dbuser@database
 dbuser@darabase]$
 
 webserver's public key stored on database server (user dbuser) at .ssh/authorized_keys
-==============================================================
+=================================================================
 
 Sync (time) in all your servers with ntp.microsoft.com
 
@@ -422,14 +422,16 @@ server 10.12.33.44 iburst
 3. timedatectl set-ntp true
 4. chronyc sources -v (Redhat 7 or higher) == ntpq -p (RHEL 4,5,6)
 
-===============================================================================
+=================================================================
 =================================================================
 #		Network Session 				#
 =================================================================
 
 TCP (Transmisson Control ) --> 3 way handshake (SSH)
--flow control
--reliable 
+- flow control
+- Reliable 
+- Congestion control
+- Error detection
 
 UDP (User datagram) --> Streaming 
 
