@@ -379,6 +379,50 @@ Private key
 
 Wireshark Running and collect the date (packets) (Encrypted) , it needs a private key to decrypt it
 
+
+
+=========================================================================
+
+user: web
+user: root
+machine: webserver (10.0.0.3)
+
+
+remote_user: dbuser 
+remote_password: ***** 
+remote_machine: database (10.12.2.2)
+
+
+
+web@webserver]$ ssh-keygen (generate id_rsa.pub , id_rsa) 
+web@webserver]$ ssh-copy-id dbuser@database
+password: *****
+
+Done 
+
+web@webserver]$ ssh dbuser@database
+dbuser@darabase]$
+
+webserver's public key stored on database server (user dbuser) at .ssh/authorized_keys
+==============================================================
+
+Sync (time) in all your servers with ntp.microsoft.com
+
+ntp protocol --> port 123 
+
+
+chronyd (time's service)
+
+1. vi /etc/chrony.conf
+server ntp.microsoft.com iburst
+OR 
+server 10.12.33.44 iburst 
+
+2.  systemctl restart chronyd
+3. timedatectl set-ntp true
+4. chronyc sources -v (Redhat 7 or higher) == ntpq -p (RHEL 4,5,6)
+
+===============================================================================
 =================================================================
 #		Network Session 				#
 =================================================================
@@ -434,7 +478,7 @@ NAME
 Private
 public
 backup 
-=========================================================================
+============================================================================================
 
 COMMANDS
 =========
@@ -450,18 +494,13 @@ COMMANDS
 9. netstat -tuplen (show PID, listening , with numbers )
 10. ss -ta 
 11. nmcli con add 
-
-nmcli con add con-name private type ethernet ifname eno3
-
+==>nmcli con add con-name private type ethernet ifname eno3
 12. nmcli con modify 
-
-nmcli con mod 'private' ipv4.method manual ipv4.addresses 192.168.1.33/24 
- 
+==> nmcli con mod 'private' ipv4.method manual ipv4.addresses 192.168.1.33/24 
 13. nmcli con up <connection-name>
 14. nmcli con down <connection-name>
 15. nmcli device dis <interface name>
 16. nmcli con delete <connection-name>
-
 17. hostnamectl 
 18. hostnamectl set-hostname XXXXXX
 19. host 
@@ -470,7 +509,6 @@ nmcli con mod 'private' ipv4.method manual ipv4.addresses 192.168.1.33/24
 22. scp /root/files*  mohamed@dns-server:/opt/
 23 sftp user@<machine_name>
 ========================================================
-
 Files
 =====
 
