@@ -379,13 +379,101 @@ Private key
 
 Wireshark Running and collect the date (packets) (Encrypted) , it needs a private key to decrypt it
 
-
-================================================================
-
-
 ==================================================================
 ==================================================================
 
-/003
-/004
-/014
+TCP (Transmisson Control ) --> 3 way handshake (SSH)
+-flow control
+-reliable 
+
+UDP (User datagram) --> Streaming 
+=================================================================================================================================
+
+Link Layer
+Frame :
+	1. SRC MAC (Unique) 
+	2. Dest. MAC
+	3. Ethernet type (IP.v4 IP.v6)
+	4. Payload (IP header) + Segment (TCP header)+ DATA
+IP header (Packet)
+	1.Src. IP (32 bit) (4 byte)
+	2.Dest. IP
+	3.Protocl (TCP or UDP)
+	4.Ver. (IPv4 or IPv6)
+	5. flags (TTL)
+TCP header
+	1. src. port
+	2. Dest port
+	3.Ack number
+	4. Seq number
+	5. Flags (ACK,SYN,PSH,FIN)
+	6.DATA 
+
+from 192.168.0.0 to  192.168.255.255  192.168.0.1 , 0.2 , ...0.254 , ....1.0 (CLASS C )
+
+
+2^n - 2 in class C (2^8 -2 ) = 254 hosts  
+
+
+==========================================================================================
+to lookup (query) entry (google.com) , database-server
+
+ping google.com
+ping database-server
+
+	1. check this entry on hosts file to translate
+	2. if not exist on hosts file , then it will check dns server assgined for the NIC 
+	
+	
+	
+UUID --> universal unique ID for anything 
+
+NAME
+
+Private
+public
+backup 
+=========================================================================
+
+COMMANDS
+=========
+
+1. ip addr s 
+2. ip -s link show <interface name>
+3. ping -c 
+4. traceroute
+5. tracepath
+6. route -- ip route 
+7. nmcli con show
+8. nmcli device status 
+9. netstat -tuplen (show PID, listening , with numbers )
+10. ss -ta 
+11. nmcli con add 
+
+nmcli con add con-name private type ethernet ifname eno3
+
+12. nmcli con modify 
+
+nmcli con mod 'private' ipv4.method manual ipv4.addresses 192.168.1.33/24 
+ 
+13. nmcli con up <connection-name>
+14. nmcli con down <connection-name>
+15. nmcli device dis <interface name>
+16. nmcli con delete <connection-name>
+
+17. hostnamectl 
+18. hostnamectl set-hostname XXXXXX
+19. host 
+20. tar -cvzf <archive_name.tar|.tar.gz> /.../...  /var
+21. tar -xvzf <archive_name.tar|.tar.gz> -C <DIR_NAME>
+22. scp /root/files*  mohamed@dns-server:/opt/
+23 sftp user@<machine_name>
+========================================================
+
+Files
+=====
+
+/etc/hosts
+/etc/resolve.conf
+/etc/sysconfig/network-scripts/ifcfg-<connection-name>
+/etc/hostname
