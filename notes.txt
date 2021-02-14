@@ -379,15 +379,16 @@ Private key
 
 Wireshark Running and collect the date (packets) (Encrypted) , it needs a private key to decrypt it
 
-==================================================================
-==================================================================
+=================================================================
+#		Network Session 				#
+=================================================================
 
 TCP (Transmisson Control ) --> 3 way handshake (SSH)
 -flow control
 -reliable 
 
 UDP (User datagram) --> Streaming 
-=================================================================================================================================
+
 
 Link Layer
 Frame :
