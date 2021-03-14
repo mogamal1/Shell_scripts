@@ -518,3 +518,215 @@ Files
 /etc/resolve.conf
 /etc/sysconfig/network-scripts/ifcfg-<connection-name>
 /etc/hostname
+======================================================================================
+
+
+How to Extend a LV
+==================
+
+1. issue vgdisplay command to check the availability
+2. if required space > Free space in the VG 
+	then i will add a new partition to the VG 
+	** create a physcial partiton from assigned disk -->parted /dev/disk_name mkpart any_name 1024MiB  5000MiB)
+													--> parted /dev/disk_name set <#> lvm on 
+	** create a physcial volume from created partition --> pvcreate /dev/disk_name<#>)
+	** extend the current Volume group --> vgextend <VG_NAME> /dev/disk_name<#>)
+	** Verify using command --> vgdisplay <VG_NAME>)
+	** extend my logical volume --> lvextend -L ((+size in KiB/MiB/GiB/B)) or -l ((+size in PEs)) /dev/disk_name<#>
+	** notify the file system resize2fs (EXT2,3,4) or xfs_growfs (XFS)
+	
+	
+	
+	
+3.	else if required space < Free space in the VG 
+	then i will isse lvextend command 
+	** extend my logical volume --> lvextend -L ((+size in KiB/MiB/GiB/B)) or -l ((+size in PEs)) /dev/disk_name<#> 
+
+====================================================================================================================
+
+How to reduce a LV 
+=====================
+1. issue df -h or lvdisplay  command to check the free space 
+
+remove disk or partiton from Volume group 
+
+
+reduce --> VG --> corrupted disk 
+
+lv (part from volume group) (group of partitons) 
+
+					/dev/sdc (has a problem)
+/dev/sdb1 5G /dev/sdb2 5G /dev/sdc4 7G 
+
+pvcreate /dev/sdb1 /dev/sdb2 /dev/sdc4 
+vgcreate VG1 /dev/sdb1 /dev/sdb2 /dev/sdc4
+
+lvcreate -L 5G LV1 VG1 10GB 
+============================================
+
+pvmove /dev/sdc4 ===> copy from /dev/sdc4 to any pv on the Volume group VG1 6GB
+
+vgreduce VG1 /dev/sdc4 
+pvremove /dev/sdc4 
+
+
+vgextend VG1 /dev/sdd5 
+================================================================================
+SMB/CIFS (protocol used for NAS LINUX/WINDOWS OS )  
+
+port 139 
+for newer version 445 
+
+
+Mount SMB share 
+
+1. Identify 
+showmount -e (NFS) server1 or IP 
+smbclient -L server1 or IP 
+ 
+2. create mount point (mkdir)
+3.mount 
+
+mount -t cifs -o rw,sync -o credentials=/home/ahmed/cred.txt   //server1/strg  /mnt 
+ 
+
+automount 
+
+/etc/auto.master.d/filename.autofs
+=======================================================================================
+
+
+
+NFS Share 
+==========
+
+NAS 
+
+IP or hostname 
+NFS share point /strg 
+
+showmount -e IP  
+
+
+
+
+
+mount -t nfs , ext4 , xfs , smb -o ro,rw,sync,root_squash 
+write operations <-- sync (default asynch)
+
+
+
+
+===========================================
+Indirect mapping
+
+/srv/  /etc/auto.demo
+
+vi /etc/auto.demo
+
+* -rw,sync    server1:&
+
+
+server1:/strg/dir1 
+
+Direct mapping
+==============
+
+
+/etc/auto.master.d/ 
+
+vi demo.autofs
+
+/- 			/etc/auto.demo 
+
+
+vi /etc/auto.demo
+
+/srv/storage 	-rw,sync server1:/strg 
+
+
+
+
+
+server1:/strg/1
+server1:/strg/dir2 
+
+
+/mnt 
+
+
+
+
+df -h 
+
+
+
+server1:/strg/dir2            /srv/dir2 
+server1:/strg/dir3			/srv/dir3 
+
+
+====================================================================================================
+
+EXIT CODES   $? 
+===========
+
+when you run command or script 
+you expect output or error
+
+if output occured , then $? will be zero 
+if error occured , then $? will be (exit code rather than zero )
+
+
+
+installation failed 
+check exit code if zero --> installation done
+				else --> installation failed
+				
+				
+				install failed with error 0x088545557  <--- exit code 
+				
+				
+				
+				127 ---> command not found 
+				2 ---> file not found 
+				0 -->  successed
+				install done with error 0 
+===============================================================================================
+
+yum provides kernel
+
+kernel 
+
+1.yum -y update kernel 
+2.yum install xsane-gimp
+3.yum install ryt-system
+4.yum remove wvdial 
+
+apt-get install ---- (debian)
+
+
+du -sh /etc  > file.txt
+/mnt/share/doc
+
+
+df -h (mount points)
+du -sh (files or directories)
+
+
+
+lsblk  --> list block device 
+====================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
