@@ -521,6 +521,268 @@ Files
 ======================================================================================
 
 
+
+at TIMESPEC
+
+at now +5min
+at 8pm mar 5 2021 
+
+at> chown user:group /tmp/file
+at> touch /root/file
+
+CTRL +D 
+
+at> (EOT)
+
+
+at queue (atq command) 
+
+
+==========================
+
+file --> script 
+
+
+1. shebang #!
+2. shell executable file /bin/bash
+3. execute permission x
+4. (optional ) end with (.sh) 
+
+======================================================================================
+Recurring Tasks
+===============
+
+
+
+scheduler service name (crond)
+
+systemctl status crond 
+
+
+
+x=5  (system variable)
+
+/etc/profile 
+
+
+/etc/crontab  <-- add your entry  (vi /etc/crontab )
+/etc/cron.d/  <-- add file with your entry  (vi job )
+
+
+
+(add scripts on below )
+
+
+/etc/cron.daily/
+00:01
+/etc/cron.weekly/
+sun 00:01
+/etc/cron.monthly/   --> RHEL 6 (/etc/anacrontab)
+1/4 - 00:01
+/etc/cron.hourly/    --> /etc/cron.d/0hourly
+7:01
+
+
+
+========================================
+
+x=5 (user variable)
+
+~/.bash_profile (hidden file)
+
+/home/ahmed/.bash_profile
+
+
+crontab -e
+
+======================================================================================
+
+scp VIP.files >> anonymous server  (hacking)   daily at 2:00 AM  (cron job) 
+
+
+1. crontab -l   <-- 1000 user (mohsen)  grep -iH scp /var/spool/cron/*
+2. /etc/crontab 
+3. /etc/cron.d/ 
+
+grep -Hi scp /etc/cron.d/* 
+======================================================================================
+configure systemd-tmpfiles 
+===========================
+
+1. location for managment temporary configuration files /etc/tmpfiles.d/*.conf 
+
+/usr/lib/  <--- cannot edit here 
+
+cp /usr/lib/fjfff.txt --> /etc/systemd/system 
+
+
+python.conf
+
+x /tmp/pymp-* 
+
+
+create symlink (ln -s) or copy (cp) this configuration file to /etc/tmpfiles/ 
+
+
+2. Verification --> systemd-tmpfiles --clean /etc/tmpfiles/python.conf
+
+
+
+3. Manual Run (for new files ) 
+systemd-tmpfiles --create /etc/tmpfiles/newfile.conf   <-- run once 
+systemd-tmpfiles --clean /etc/tmpfiles/newfile.conf 
+
+======================================================================================
+tuning performance
+==================
+
+1. Statuc Tuning 
+define some parameters in kernel 
+
+
+
+2. Dynamic Tuning 
+       -Storage (IO) (latency)    ->  max IO 
+        read/write 
+        
+       -CPU    (GHZ) SPEED (BUS SPEED) (cache memory) x86 x64 
+       -Network devices (100 Mbps / 1 Gbps -- 130  Mbps ) (Bandwidth)   ---> +40Gbps (FOC) 
+       
+    OS --> manage CPU,IO,BW 
+    
+    tuned-adm profile powersave 
+    
+    
+periority CPU 
+
+-20 ---  19  (40 level)  
+
+======================================================================================
+SELinux
+========
+
+set of roles to determine which process can access which files.
+
+context (label) --> for file , dir or process (file)
+
+modes:
+1. enforcing
+2. permissive
+3. disabled 
+
+getenforce 
+setenforce 
+
+ 
+For presistant setting
+======================
+/etc/sysconfig/selinux 
+
+
+when you enable the SELinux enforcing mode , you should take care of below :
+
+1. labels of each file/dir 
+2. preserve all properties (use man and find the preserve option for every command used)
+====================================================================================================
+
+controlling selinux 
+
+1. chcon _u:_r:_t:s  file or dir 
+2. restorecon (-v for dir ) 
+3. semanage fcontext -l (default labels here <--)
+
+====================================================================================================
+
+SELinux booleans 
+1. True/false (switch)
+2. semanag boolean -l (default booleans here <--)
+
+==========================================
+
+Troubleshooting SELinux
+=======================
+
+1. install setroubleshoot-server  package (yum -y install )
+2. tail -100 /var/log/audit/audit.log 
+ or 
+  tail -100 /var/log/messages |sealert 
+======================================================================================
+SELINUX --> Security Kernel Module 
+        --> Access control for apps and services 
+        --> like permssions (using labels (context) )
+        --> controll fcontext , booleans 
+        --> edit default roles (semanage)
+        
+===========================================================================================================
+
+MBR  --> Max 4 Primary Partitons (15 logical partitons)
+     --> Max size handled is 2TB
+     --> UUID Not supported 
+
+GPT 
+   --> Max 128 partiton
+   --> Max size handled is 8ZiB
+   --> support error checking 
+   --> support data recovery 
+   --> partiton table exist on head and tail of disk 
+   --> UUID Supported
+===========================================================================================================
+ 
+parted , fdisk 
+
+parted /dev/sde 
+
+1. create MBR(msdos)|GPT partiton table 
+2. create paritions , and refresh if needed using "udevadm settle" command 
+3. format parition (make file system (XFS,EXT4 ...NTFS) )
+4. mount this parition --> / , /root  , /opt/app 
+
+    --> temporary mount -->  mount /dev/sda1  /mnt 
+    --> presistant mount  --> write entry in /etc/fstab 
+                                                --> "
+                                                mount -a" (recheck for /etc/fstab)
+    
+===========================================================================================================
+How to create a swap space (swap Memory) (virtual memory)
+
+1. create partition with fs = linux-swap 
+2. format parition (mkswap command)
+3. Turn on swap (Kernel control it )
+4. lsblk or free -m or top 
+======================================================================================
+
+Legacy (traditional)
+
+1. Disk --> partitioning (# of partitons)
+EX. /dev/sda --> /dev/sda{1,2,3,4} --> sda1,sda2...
+
+60 GB 
+60 GB 
+
+(max partiton size = 60 GB)
+
+==============================================
+
+LVM 
+
+1. Disk --> physical partitons  ---> Physical volumes --> Volume group --> Logical Volume 
+Ex. /dev/sda --> /dev/sda{1,2,3,4} --> phy. volumes ---> Data (/dev/sda{1,2,3,4}) --> LV 
+
+60 GB 
+60 GB 
+
+( max partiton size = 120 GB)
+
+
+2. pvcreate --> vgcreate <vg_name> <phy. volumes> --> lvcreate -n <lv_name> -L <size in Mb,GB,KB> -l <# of LE >
+
+======================================================================================
+======================================================================================
+======================================================================================
+
+
+==============================================
+
 How to Extend a LV
 ==================
 
