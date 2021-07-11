@@ -1,0 +1,167 @@
+Pre
+====
+Boot CD     (400 MB) 
+Full DVD cd (4 GB)
+
+
+Installation Source 
+===================
+
+ 
+local media (ISO image - CD , HDD  , USB )
+Network
+=======
+1. HTTP http://..............
+
+Software Selection
+==================
+
+- Minimal Install (Basic software to run the OS )
+- Server with GUI (Full OS)  <--- HERE 
+- Web Server 
+- File and print Server 
+- Gnome server 
+
+===================================================================================
+Installation Destination
+=========================
+Storage
+=======
+1. DAS (Direct Attached)   <--- HDD , SSD 
+2. NAS ( Network Attached)   <--- 
+3. SAN ( Storage Area Network ) <--- EMC , HP 	
+
+
+XFS , EXT4 
+
+Kdump
+=====
+Kernel Dump ( on / Off )   <---> Windows Debugger 
+
+Security Policy
+================
+N/A 
+ 
+Off 
+
+Network
+========
+ON
+
+IP
+SubnetMask 
+DNS 
+GateWay
+======================================================================================================================================================================
+Standard / Full
+
+--------------------------------------- 
+~#     								                |
+									                    |
+									                    |
+---------------------------------------
+
+
+
+root (Linux) == Administrator (Windows)
+
+
+============================================================
+
+Editing in CLI 
+
+|< CTRL+k 
+U   CTRL +u
+
+======================================================================================================================================================================
+Why Linux ....
+
+1. Popular 
+2. Security 
+3. Vendors depend on 
+4. Hard to learn 
+5. Exams ( Added Value ) 
+	Redhat 
+	- RHCSA (1 exam) (Admin 1 and 2)  beginner to mid-level 
+      === Admin3 ==	( Servers) 
+	- RHCE (Automation) DevOps  1 exam 
+	- RHCA ( 5 Exams) <<-------
+	
+Techinal 
+========
+web servers .... 
+======================================================================================================================================================================
+
+1- cat filename.txt 
+
+
+hello 
+
+2- tail  --> last 10 lines 
+3- head --> first 10 lines 
+
+
+===============================
+root file system 
+/ 
+home of the root
+/root
+
+home of any standard user 
+/home/<username>
+
+configuration directory 
+/etc
+/mnt or /media <===> mount USB/CD/DISK on D:/ E:/ ...etc. 
+
+" Devices "
+/dev/sda ( 1TB)
+/dev/sdc (512 GB) ----> mount to /mnt or /media 
+
+copy file to /media or /mnt  ?  
+
+/lib
+/usr
+/usr/bin
+/usr/sbin 
+/usr/lib 
+/proc 
+/boot 
+ ===============================================
+ 
+ C:\users\mohamed\Desktop ----> /home/mohamed/desktop
+ cd . , cd .. , cd -  , cd ~ 
+====================================================================================================================================================================== 
+COMMAND 
+-------
+
+--> COMMAND [Space] [Options] [Space] [Arguments]
+
+cd - 
+cd /home/mogamal
+
+mkdir -p /etc/sss 
+
+
+cp <source path or file or directory > <destination path or file or directory>
+
+cp file1.txt /tmp/file2     ---> cp /"pwd"/file1.txt /tmp/file2 
+
+pwd 
+ 
+ 
+ ==> 
+ 
+-$ pwd 
+/etc/xyz/folder1
+
+cp -f file1.txt /tmp/file2 ---> cp /etc/xyz/folder1/file1.txt /tmp/file2
+mv -f file1.txt /tmp/file2 ---> mv /etc/xyz/folder1/file1.txt /tmp/file2
+rm -rf file1.txt /tmp/file2 ---> rm /etc/xyz/folder1/file1.txt /tmp/file2
+rm file1.txt 
+
+For Directories actions
+========================
+
+option [-r] <-- Recursive 
+======================================================================================================================================================================
