@@ -1,13 +1,11 @@
-Pre
-====
+OS Sources
+===========
 Boot CD     (400 MB) 
 Full DVD cd (4 GB)
 
 
 Installation Source 
 ===================
-
- 
 local media (ISO image - CD , HDD  , USB )
 Network
 =======
@@ -164,4 +162,268 @@ For Directories actions
 ========================
 
 option [-r] <-- Recursive 
+======================================================================================================================================================================
+link 
+====
+
+shortcut (Windows) 
+powerpoint.exe ----> create shortcut on desktop 
+
+shortcut --> symbolic link or soft link or link --> create a copy of the inode number 
+
+
+
+DISK
+=====
+
+Storage (RAW) 
+
+"File Systems"
+NTFS 
+FAT32
+FAT16
+EXT4
+XFS
+
+
+Formating for stoarge (create index فهرس )
+DISK (1 TB
+
+image.jpg  --> DISK 
+1. create #number for this file (inode) - inode number 
+		* FILE NAME 
+		* SIZE
+		* ATTRIBUTES
+		* Inode number 0x0000
+		
+		
+		
+		
+		
+		
+		
+
+====================================================
+
+ls (list)
+
+$ pwd 
+/root 
+
+$ ls [options] [Arguments]
+
+ls -l (Full details of files or directorirs) 
+ls -a (show hidden files) (hidden files which start with dot . )
+ls -alh
+ls -r  (reverse sort)
+ls -h  (human readable 4k , 4M 4.0G  ) 
+ls -t  (sort by modification time)
+ls -i  (show inode number)
+ls -d  (list for directory itself)
+
+
+ls -lrtha 
+
+- --- --- --- user group Date size  <file name> 
+
+first section - (file type )
+directory  d 
+charcter   c    
+binary     - 
+link       l 
+generic file - 
+
+--- --- --- (Permissions)
+user --> owner 
+group --> group owner 
+size --> file size or directory 
+filename --> name of the file 
+==============================================================
+~# pwd
+/home/mohamed
+~# ls 
+
+< Show the content of /home/mohamed >
+~# ls -l . 
+ 
+< Show the content of currenty working directory /home/mohamed >
+
+~# ls -l .. 
+
+< Show the content of pre-working directory "/home" >
+
+
+=================================================================
+
+Linux Case-Sensitive 
+Windows inCase-Sensitive 
+
+
+file1.txt
+File1.txt 
+
+
+
+===================================================================
+escape charcter "\"
+to escape special charcters
+
+$() <-- Command subst. 
+
+x+y=5  x=5-y
+(5-y)-y=6 
+
+pwd 
+
+/root 
+
+
+touch $(pwd)/file1 
+=================================================
+
+How to get help in Linux 
+
+man [options] arguments
+
+man 5 <command name>
+man 5 firewall.service 
+
+man -k <keyword>
+man -k password 
+
+=================================================
+
+Redirection 
+============
+
+~$ ls 
+file1 file2 file3 
+
+~$ ls > file 
+1. ls list current working directory to standard output 
+2. > redirect std. output to file and create it if not exist or overwrite if it not empty 
+
+
+~$ ls >> file 
+1. ls list current working directory to standard output 
+2. > redirect std. output to file and create it if not exist or append if it not empty 
+
+===========================================================================================
+
+Redirection
+============
+Pipelines  | 
+
+
+process  --> std. output  --> std. input ---> std output
+		 --> std. error					 --> std. error 
+
+=============================================================================================
+Text editor 
+
+vi/vim 
+nano 
+ 
+==============================================================================================
+
+Variables
+=========
+
+x=tt --> x is a variable store value of "tt" 
+VERSION=10
+PATH 
+
+using command "echo" for rertriving the value of the variable 
+
+echo "$"variable_name
+env ---> show SHELL environment variables 
+
+======================================================================
+/etc --> configuration files 
+
+" GPO Group policy "
+
+/etc/profile
+/etc/bashrc 
+
+x=60 
+
+
+User Group policy 
+
+/home/username/.bash_profile
+/home/username/.bashrc 
+
+x=50
+
+source 
+
+Which's dominate : 
+================
+1. .bash_profile  x=10
+2. .bashrc        x=20 
+3. /etc/profile   x=30
+4. /etc/bashrc    x=40 
+
+
+echo $x 
+10 
+
+==================================================================================
+
+/etc/passwd --> contain all info regarding users 
+
+mohamed:x:1000:1000:Admin user of infra.:/home/mohamed:/bin/bash
+USERNAME:PASSWORD:UID:GID:COMMENT:HOME:SHELL 
+
+user by default is a standard user 
+
+to switch user "su "
+to logout enter "exit" or CTRL+D 
+
+=========================================================================
+
+How to gain Superuser Access 
+
+sudo (sudoers file)  /etc/sudoers 
+
+#
+%wheel  
+#
+ 
+
+
+add user ahmed to group wheel 
+
+usermod -aG wheel ahmed 
+
+==========================================================================
+Create user 
+
+useradd 
+command [options] arguments
+useradd test
+
+/home/test
+
+
+useradd -c "this is test user" -s /bin/bash -m test 
+
+
+ahmed (group ahmed)  --> wheel 
+
+usermod -aG wheel ahmed 
+==================================================================
+
+System Account
+==============
+useradd -u 800 http
+
+
+How to delete user 
+
+userdel -r username =-> /etc/passwd 
+
+chage username 
+
 ======================================================================================================================================================================
