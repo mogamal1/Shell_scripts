@@ -11,6 +11,6 @@ fi
 for i in `cat $1`
 do
 echo "### $i ###"
-ssh "$i" 'echo PASSWORD_HERE_PLESE |sudo -S sh -c "sed -i '"'"'/^AllowUser/ s/$/ aabdel/'"'"' /etc/ssh/sshd_config;grep -c aabdel /etc/ssh/sshd_config;service sshd restart;usermod -aG wheel aabdel;id aabdel"'
+ssh "$i" 'echo PASSWORD_HERE_PLEASE |sudo -S sh -c "sed -i '"'"'/^AllowUser/ s/$/ aabdel/'"'"' /etc/ssh/sshd_config;grep -c aabdel /etc/ssh/sshd_config;service sshd restart;usermod -aG wheel aabdel;id aabdel"'
 echo "### Done ###"
 done
