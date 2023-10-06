@@ -5,7 +5,7 @@ then
 echo "[ERROR] Please run $0 $1 with root account"
 exit 10
 fi
-
+# ===========================================================================================
 echo ">>> Preparing /etc/fstab file"
 echo "Your fstab file is $WDIR/fstab"
 FSTAB=$WDIR/fstab
