@@ -81,7 +81,9 @@ sysctl -w net.ipv4.route.flush=1
 echo "DONE"
 # ===========================================================================================
 echo ">>> Preparing AIDE Setup"
-(dnf list installed aide || dnf -y install aide) && test -f /var/lib/aide/aide.db.gz || (aide --init && mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz)
+(dnf list installed aide || dnf -y install aide) \
+&& test -f /var/lib/aide/aide.db.gz \
+|| (aide --init && mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz)
 echo "AIDE is configured."
 chown root:root /etc/systemd/system/aidecheck.*
 chmod 0644 /etc/systemd/system/aidecheck.*
@@ -101,9 +103,10 @@ echo ">>> 4.2.3 Ensure permissions on all logfiles are configured"
 echo "SKIPPED"
 # ===========================================================================================
 echo ">>> 2.2.1.2 Ensure chrony is configured - user"
-echo "Add or edit server or pool lines to /etc/chrony.conf as appropriate:
-server <remote-server>
-Configure chrony to run as the chrony user /etc/chrony/chrony.conf"
+grep -qE "^(server|pool)" /etc/chrony.conf || echo "[ERROR] Please configure NTP servers"
+grep -qxF "OPTIONS=\"-u chrony\"" /etc/sysconfig/chronyd \
+|| ( echo "OPTIONS=\"-u chrony\"" > /etc/sysconfig/chronyd && systemctl restart chronyd )
+echo "Chrony service is running with chrony user"
 echo "DONE"
 # ===========================================================================================
 echo ">>> 5.1.8 Ensure at/cron is restricted to authorized users"
