@@ -1,7 +1,13 @@
 #!/bin/bash
 WDIR=$1
+if [ `id -u` -ne 0 ]
+then
+echo "[ERROR] Please run $0 $1 with root account"
+exit 10
+fi
+
 echo ">>> Preparing /etc/fstab file"
-echo "Your backup of fstab file is $WDIR/fstab"
+echo "Your fstab file is $WDIR/fstab"
 FSTAB=$WDIR/fstab
 cp $WDIR/fstab /tmp/fstab.bkp && echo "Backup of /etc/fstab stored at /tmp/fstab.bkp"
 
@@ -75,14 +81,14 @@ sysctl -w net.ipv4.route.flush=1
 echo "DONE"
 # ===========================================================================================
 echo ">>> Preparing AIDE Setup"
-dnf -y install aide && aide --init && mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+(dnf list installed aide || dnf -y install aide) && test -f /var/lib/aide/aide.db.gz || (aide --init && mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz)
 echo "AIDE is configured."
 chown root:root /etc/systemd/system/aidecheck.*
 chmod 0644 /etc/systemd/system/aidecheck.*
 systemctl daemon-reload
 systemctl enable aidecheck.service
 systemctl --now enable aidecheck.timer
-echo "AIDE service is scheduled and enabled . . . "
+echo "AIDE service is scheduled and enabled."
 echo "DONE"
 # ===========================================================================================
 echo ">>> 1.1.21 Ensure sticky bit is set on all world-writable directories"
@@ -100,7 +106,7 @@ server <remote-server>
 Configure chrony to run as the chrony user /etc/chrony/chrony.conf"
 echo "DONE"
 # ===========================================================================================
-echo ">>> 5.1.8 Ensure at/cron is restricted to authorized users - cron.deny: [FAILED]"
+echo ">>> 5.1.8 Ensure at/cron is restricted to authorized users"
 rm -f /etc/cron.deny
 rm -f /etc/at.deny
 touch /etc/cron.allow
