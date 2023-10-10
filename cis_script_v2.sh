@@ -9,7 +9,7 @@ fi
 echo ">>> Preparing /etc/fstab file"
 echo "Your fstab file is $WDIR/fstab"
 FSTAB=$WDIR/fstab
-cp $WDIR/fstab /tmp/fstab.bkp && echo "Backup of /etc/fstab stored at /tmp/fstab.bkp"
+cp $WDIR/fstab /opt/fstab.bkp && echo "Backup of /etc/fstab stored at /tmp/fstab.bkp"
 
 if [ `grep -w "/var/tmp" $FSTAB|grep -c defaults,` -eq 0 ]
 then
