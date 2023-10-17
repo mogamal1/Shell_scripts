@@ -16,23 +16,33 @@ if [ `grep -w "/var/tmp" $FSTAB|grep -c defaults,` -eq 0 ]
 then
 sed -i  '/\/var\/tmp/s/defaults/&,nosuid,nodev,noexec/' $FSTAB
 fi
-
-if [ `grep -w "/tmp" $FSTAB|grep -c defaults,` -eq 0 ]
+#--------------------------------------------------------------------------------------------
+if [ `grep -v "^#" $FSTAB|grep -wc "/tmp"` -eq 0 ]
 then
-sed -i  '/ \/tmp/s/defaults/&,nosuid,noexec/' $FSTAB
+echo "tmpfs   /tmp   tmpfs  defaults,rw,nosuid,nodev,noexec   0 0" >> $FSTAB
+elif [ `grep -w "/tmp" $FSTAB|grep -c defaults,` -eq 0 ]
+then
+sed -i  '/ \/tmp/s/defaults/&,nosuid,noexec,nodev/' $FSTAB
 fi
-
+#--------------------------------------------------------------------------------------------
 if [ `grep -w "/home" $FSTAB|grep -c defaults,` -eq 0 ]
 then
 sed -i  '/\/home/s/defaults/&,nodev/' $FSTAB
 fi
-
-if [ `grep -w "/dev/shm" $FSTAB|grep -c defaults,` -eq 0 ]
+#--------------------------------------------------------------------------------------------
+if [ `grep -v "^#" $FSTAB|grep -wc "/dev/shm"` -eq 0 ]
 then
-sed -i  '/\/dev\/shm/s/defaults/&,nosuid,nodev,noexec/' $FSTAB
+echo "tmpfs   /dev/shm   tmpfs  defaults,rw,nosuid,nodev,noexec  0 0" >> $FSTAB
+elif [ `grep -w "/dev/shm" $FSTAB|grep -c nodev` -eq 0 ]
+then
+sed -i '/\/dev\/shm/s/\(\S\+\s\+\)\(\S\+\s\+\)\(\S\+\s\+\S\+\)\(\s\+\S\+\)/\1\2\3,nosuid,nodev,noexec\4/' $FSTAB
 fi
+#--------------------------------------------------------------------------------------------
 echo "Remounting all paritions. . ."
-mount -a
+mount -o remount /dev/shm
+mount -o remount /tmp
+mount -o remount /home
+mount -o remount /var/tmp
 echo "DONE"
 # ===========================================================================================
 echo ">>> Preparing /etc/modprobe.d/CIS.conf file"
@@ -94,7 +104,8 @@ echo "AIDE is configured."
 chown root:root /etc/systemd/system/aidecheck.*
 chmod 0644 /etc/systemd/system/aidecheck.*
 systemctl daemon-reload
-systemctl enable aidecheck.service && systemctl --now enable aidecheck.timer  || echo "0 5 * * * /usr/sbin/aide --check" >> /var/spool/cron/root
+(systemctl enable aidecheck.service && systemctl --now enable aidecheck.timer ) \
+|| echo "0 5 * * * /usr/sbin/aide --check" >> /var/spool/cron/root
 echo "AIDE service is scheduled and enabled."
 echo "DONE"
 # ===========================================================================================
