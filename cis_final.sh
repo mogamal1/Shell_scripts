@@ -43,6 +43,7 @@ mount -o remount /dev/shm
 mount -o remount /tmp
 mount -o remount /home
 mount -o remount /var/tmp
+mount -a
 echo "DONE"
 # ==============================================================================================================
 echo ">>> Preparing /etc/modprobe.d/CIS.conf file"
