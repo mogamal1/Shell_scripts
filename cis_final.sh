@@ -1,9 +1,9 @@
 #!/bin/bash
 # VERSION 5
 WDIR=$1
-if [ `id -u` -ne 0 ]
+if [[ `id -u` -ne 0  || -z $1 ]]
 then
-echo "[ERROR] Please run $0 $1 with root account"
+echo "[ERROR] Please run $0 /<etc> with root account"
 exit 10
 fi
 # ==============================================================================================================
