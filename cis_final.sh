@@ -150,7 +150,7 @@ grep -qxF "OPTIONS=\"-u chrony\"" /etc/sysconfig/chronyd \
 echo "Chrony service is running with chrony user"
 echo "DONE"
 # ==============================================================================================================
-echo ">>> 5.1.8 Ensure at/cron is restricted to authorized users"
+echo ">>> 5.1.[2,3,4,5,6,7,8] Ensure at/cron is restricted to authorized users"
 rm -f /etc/cron.deny
 rm -f /etc/at.deny
 touch /etc/cron.allow
