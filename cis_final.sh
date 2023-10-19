@@ -1,5 +1,5 @@
 #!/bin/bash
-# VERSION 3
+# VERSION 5
 WDIR=$1
 if [ `id -u` -ne 0 ]
 then
@@ -10,7 +10,7 @@ fi
 echo ">>> Preparing /etc/fstab file"
 echo "Your fstab file is $WDIR/fstab"
 FSTAB=$WDIR/fstab
-cp $WDIR/fstab /opt/fstab.bkp && echo "Backup of /etc/fstab stored at /tmp/fstab.bkp"
+cp $WDIR/fstab /opt/fstab.bkp && echo "Backup of /etc/fstab stored at /opt/fstab.bkp"
 
 if [ `grep -w "/var/tmp" $FSTAB|grep -c defaults,` -eq 0 ]
 then
@@ -82,7 +82,19 @@ net.ipv6.conf.default.accept_redirects=0
 net.ipv6.conf.default.accept_source_route=0
 net.ipv4.conf.all.send_redirects=0
 net.ipv4.conf.default.send_redirects=0
+net.ipv4.conf.all.secure_redirects=0
+net.ipv4.conf.all.log_martians=1
+net.ipv4.conf.default.log_martians=1
+net.ipv4.conf.default.rp_filter=1
+kernel.randomize_va_space=2
 EOF
+
+# 3.2.7 Ensure Reverse Path Filtering is enabled      --------------------------------------------------------------------------------
+grep -Els '^s*net.ipv4.conf.all.rp_filters*=s*0' /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf \
+| while read filename; do sed -ri 's/^s*(net.ipv4.net.ipv4.conf.all.rp_filters*)(=)(s*S+b).*$/# *REMOVED* 1/' $filename; done; 
+sysctl -w net.ipv4.conf.all.rp_filter=1; sysctl -w net.ipv4.route.flush=1
+# -------------------------------------------------------------------------------------------------------------------------------------
+
 echo "Applying sysctl configs. . . "
 sysctl -w net.ipv6.conf.all.accept_ra=0
 sysctl -w net.ipv6.conf.default.accept_ra=0
@@ -93,7 +105,12 @@ sysctl -w net.ipv4.conf.all.accept_redirects=0
 sysctl -w net.ipv4.conf.all.send_redirects=0
 sysctl -w net.ipv4.conf.default.accept_redirects=0
 sysctl -w net.ipv4.conf.default.send_redirects=0
+sysctl -w net.ipv4.conf.default.secure_redirects=0
+sysctl -w net.ipv4.conf.all.log_martians=1
+sysctl -w net.ipv4.conf.default.log_martians=1
+sysctl -w net.ipv4.conf.default.rp_filter=1
 sysctl -w net.ipv4.route.flush=1
+sysctl -w kernel.randomize_va_space=2
 echo "DONE"
 # ==============================================================================================================
 echo ">>> Preparing AIDE Setup"
@@ -114,6 +131,13 @@ echo ">>> 1.1.21 Ensure sticky bit is set on all world-writable directories"
 #-xdev -type d ( -perm -0002 -a ! -perm -1000 ) 2>/dev/null|xargs -I '{}' chmod a+t '{}'
 echo "SKIPPED"
 # ==============================================================================================================
+echo ">>> 4.2.1.3 Ensure rsyslog default file permissions configured"
+echo "\$FileCreateMode 0640" >> /etc/rsyslog.conf
+echo "DONE"
+# ==============================================================================================================
+grep -e ^[\s]*Compress /etc/systemd/journald.conf|awk '{print} END {if (NR == 0) cmd="echo Compress=yes >> /etc/systemd/journald.conf" ; system(cmd) }'
+echo "DONE"
+# ==============================================================================================================
 echo ">>> 4.2.3 Ensure permissions on all logfiles are configured"
 #find /var/log/ -type f -perm /g+wx,o+rwx -exec chmod g-wx,o-rwx '{}' +
 echo "SKIPPED"
@@ -130,8 +154,8 @@ rm -f /etc/cron.deny
 rm -f /etc/at.deny
 touch /etc/cron.allow
 touch /etc/at.allow
-chmod og-rwx /etc/cron.allow
 chmod og-rwx /etc/at.allow
-chown root:root /etc/cron.allow
 chown root:root /etc/at.allow
+chmod og-rwx /etc/cron*
+chown root:root /etc/cron*
 echo "DONE"
