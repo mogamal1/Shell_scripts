@@ -135,6 +135,7 @@ echo ">>> 4.2.1.3 Ensure rsyslog default file permissions configured"
 echo "\$FileCreateMode 0640" >> /etc/rsyslog.conf
 echo "DONE"
 # ==============================================================================================================
+echo ">>> 4.2.2.2 Ensure journald is configured to compress large log files"
 grep -e ^[\s]*Compress /etc/systemd/journald.conf|awk '{print} END {if (NR == 0) cmd="echo Compress=yes >> /etc/systemd/journald.conf" ; system(cmd) }'
 echo "DONE"
 # ==============================================================================================================
