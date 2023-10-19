@@ -1,5 +1,5 @@
 #!/bin/bash
-# CIS SCRIPT 
+# CIS SCRIPT
 # VERSION 5
 WDIR=$1
 if [[ `id -u` -ne 0  || -z $1 ]]
@@ -68,6 +68,7 @@ echo "DONE"
 echo ">>> Preparing Banner files"
 echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/issue.net
 echo 'Authorized uses only. All activity may be monitored and reported.' > /etc/issue
+echo 'Removing /etc/motd file'
 rm -f /etc/motd
 echo "DONE"
 # ==============================================================================================================
@@ -92,7 +93,7 @@ EOF
 
 # 3.2.7 Ensure Reverse Path Filtering is enabled      --------------------------------------------------------------------------------
 grep -Els '^s*net.ipv4.conf.all.rp_filters*=s*0' /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf \
-| while read filename; do sed -ri 's/^s*(net.ipv4.net.ipv4.conf.all.rp_filters*)(=)(s*S+b).*$/# *REMOVED* 1/' $filename; done; 
+| while read filename; do sed -ri 's/^s*(net.ipv4.net.ipv4.conf.all.rp_filters*)(=)(s*S+b).*$/# *REMOVED* 1/' $filename; done;
 sysctl -w net.ipv4.conf.all.rp_filter=1; sysctl -w net.ipv4.route.flush=1
 # -------------------------------------------------------------------------------------------------------------------------------------
 
