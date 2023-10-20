@@ -1,6 +1,6 @@
 #!/bin/bash
 # CIS SCRIPT
-# VERSION 5
+# VERSION 6.1
 WDIR=$1
 if [[ `id -u` -ne 0  || -z $1 ]]
 then
@@ -68,8 +68,11 @@ echo "DONE"
 echo ">>> Preparing Banner files"
 echo 'All activities performed on this system will be monitored.' > /etc/issue.net
 echo 'All activities performed on this system will be monitored.' > /etc/issue
-echo 'Removing /etc/motd file'
-rm -f /etc/motd
+echo 'Fixing /etc/motd file'
+touch /etc/motd
+:> /etc/motd
+chmod root:root /etc/motd 
+chmod u-x,go-wx /etc/motd
 echo "DONE"
 # ==============================================================================================================
 echo ">>> Preparing sysctl configs"
