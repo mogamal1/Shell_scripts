@@ -1,6 +1,6 @@
 #!/bin/bash
 # CIS SCRIPT
-# VERSION 6.1
+# VERSION 7
 WDIR=$1
 if [[ `id -u` -ne 0  || -z $1 ]]
 then
@@ -71,7 +71,7 @@ echo 'All activities performed on this system will be monitored.' > /etc/issue
 echo 'Fixing /etc/motd file'
 touch /etc/motd
 :> /etc/motd
-chmod root:root /etc/motd 
+chown root:root /etc/motd 
 chmod u-x,go-wx /etc/motd
 echo "DONE"
 # ==============================================================================================================
