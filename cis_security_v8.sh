@@ -1,6 +1,6 @@
 #!/bin/bash
 # CIS SCRIPT
-# VERSION 7
+# VERSION 8
 WDIR=$1
 if [[ `id -u` -ne 0  || -z $1 ]]
 then
@@ -127,8 +127,8 @@ echo ">>> Preparing AIDE Setup"
 && test -f /var/lib/aide/aide.db.gz \
 || (aide --init && mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz)
 echo "AIDE is configured."
-chown root:root /etc/systemd/system/aidecheck.*
-chmod 0644 /etc/systemd/system/aidecheck.*
+chown root:root /etc/systemd/system/aidecheck.* 2> /dev/null 
+chmod 0644 /etc/systemd/system/aidecheck.* 2> /dev/null 
 systemctl daemon-reload
 (systemctl enable aidecheck.service && systemctl --now enable aidecheck.timer ) \
 || echo "0 5 * * * /usr/sbin/aide --check" >> /var/spool/cron/root
@@ -141,7 +141,7 @@ echo ">>> 1.1.21 Ensure sticky bit is set on all world-writable directories"
 echo "SKIPPED"
 # ==============================================================================================================
 echo ">>> 4.2.1.3 Ensure rsyslog default file permissions configured"
-echo "\$FileCreateMode 0640" >> /etc/rsyslog.conf
+grep FileCreateMode /etc/rsyslog.conf || echo "\$FileCreateMode 0640" >> /etc/rsyslog.conf
 echo "DONE"
 # ==============================================================================================================
 echo ">>> 4.2.2.2 Ensure journald is configured to compress large log files"
