@@ -1,6 +1,6 @@
 #!/bin/bash
 # CIS SCRIPT
-# VERSION 8
+# VERSION 9
 WDIR=$1
 if [[ `id -u` -ne 0  || -z $1 ]]
 then
