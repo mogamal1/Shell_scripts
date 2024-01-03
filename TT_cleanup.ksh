@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/usr/bin/ksh
 
 # Backup /etc/passwd with date and minutes
 backup_file="/etc/passwd.bkp.$(date +%d%m%y%H%M)"
