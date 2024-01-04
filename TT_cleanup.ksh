@@ -7,6 +7,7 @@ cp /etc/passwd "$backup_file"
 
 # Remove entries containing 'bnlt' from /etc/passwd
 echo "Removing 'bnlt' entries from /etc/passwd"
+awk -F: '/bnlt/ {print $1}' /etc/passwd | xargs -I {} userdel {}
 sed -i "/bnlt/d" /etc/passwd
 
 # Backup /etc/group with date and minutes
@@ -38,7 +39,6 @@ cp /etc/fstab "$backup_file"
 # Remove entries containing 'bnlt' from /etc/fstab
 echo "Removing 'bnlt' entries from /etc/fstab"
 sed -i "/bnlt/d" /etc/fstab
-done
 
 # Remove Logical Volume /dev/mapper/vg_lnxm06_5-lvbnlt
 echo "Removing Logical Volume /dev/mapper/vg_lnxm06_5-lvbnlt"
