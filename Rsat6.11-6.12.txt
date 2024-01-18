@@ -1,0 +1,84 @@
+Rsat Upgrade 
+==============
+From 6.11 to 6.12 
+===================================================================================
+- Redhat Enterprise Linux 7 is no longer supported 
+- Katello-agent is deprecated and will be removed in a future release 
+  Transition your workloads to use the Remote Execution feature.
+- The katello-ca-consumer package is deprecated and will be removed in a future release. 
+  Use the global registration template for registering a host to Red Hat Satellite.
+===================================================================================
+======================================================================
+***** Migrating Red Hat Satellite to Red Hat Enterprise Linux 8 ******
+======================================================================
+1. $ subscription-manager repos --enable=rhel-7-server-extras-rpms
+2. $ satellite-maintain packages install leapp leapp-repository
+3. Workaround for Known issues 
+$ subscription-manager repo-override --repo=satellite-6.11-for-rhel-8-x86_64-rpms --add=module_hotfixes:1
+$ rpm -e ansible ansible-test --nodeps
+
+4. $ leapp preupgrade   
+Ensure leapp preupgrade has no issues /var/log/leapp/leapp-report.txt 
+answer all questions (using leapp answer) and manually resolve the other reported problems
+
+Example for an issue fix 
+$ rmmod pata_acpi
+$ echo PermitRootLogin yes | tee -a /etc/ssh/sshd_config
+$ leapp answer --section remove_pam_pkcs11_module_check.confirm=True
+$ remove tomcat by using rpm -e `rpm -qa|grep tomcat` 
+
+5. $ leapp upgrade
+6. Reboot 
+
+
+===============================================
+***** Migrating Redhat Satellite to 6.12 ******
+===============================================
+
+0. 
+- On a VM , take a snapshot.
+$ cp /etc/dhcp/dhcpd.conf{,.bak}
+$ cp /etc/zones.conf{,.bak}
+
+1.  Hosts > Discovered hosts. 
+	On the Discovered Hosts page, power off and then delete the discovered hosts. 
+	From the Select an Organization menu, select each organization in turn and repeat the process to power off and delete the discovered hosts. 
+	Make a note to reboot these hosts when the upgrade is complete.
+2. $ subscription-manager repos --enable satellite-maintenance-6.12-for-rhel-8-x86_64-rpms --enable satellite-6.12-for-rhel-8-x86_64-rpms
+NOTE: 
+dnf module enable satellite:el8 if LEAPP is used 
+
+3. $ satellite-maintain upgrade list-versions
+4. Check the system:
+$ satellite-maintain upgrade check --target-version 6.12
+5. Perform the upgrade: ( prefer to use tmux or screeen and don't close the session)
+$ satellite-maintain upgrade run --target-version 6.12
+6. Check if reboot needed: 
+$ rpm --query --last kernel | head -n 1|awk '{print $1}'
+and compare with 
+$ uname -r 
+
+if not the same , do step 7 
+7. 
+$ satellite-maintain service stop
+$ reboot
+
+8. $ hash -d satellite-maintain service 2> /dev/null
+9. You must enable and synchronize the new 6.12 repositories before you can upgrade Capsule Servers and Satellite clients.
+- In the Satellite web UI, navigate to Content > Red Hat Repositories.
+- Toggle the Recommended Repositories switch to the On position.
+- From the list of results, expand the following repositories and click the Enable icon to enable the repositories:
+- Red Hat Satellite Client 6 repositories for all Red Hat Enterprise Linux versions that clients use.
+- Navigate to Content > Sync Status. Click the arrow next to the product to view the available repositories.
+- Select the repositories for 6.12,  Click Synchronize Now.
+
+
+
+Notes
+=====
+- If the Satellite 6.12 repositories are not visible in your Satellite,
+In the Satellite web UI, navigate to Content > Subscriptions, and then click Manage Manifest.
+In the Subscription Manifest pane, click Refresh to download the latest copy of the Subscription Manifest.
+
+- If an error occurs when you try to synchronize a repository, refresh the manifest. If the problem persists, raise a support request. 
+Do not delete the manifest from the Customer Portal or in the Satellite web UI; this removes all the entitlements of your content hosts.
