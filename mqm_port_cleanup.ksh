@@ -2,7 +2,7 @@
 ## Rollback/cleanup script for MQM and ports  
 
 if [[ -z "$1" ||  $EUID -ne 0 ]]; then
-   echo "Usage ./$0 <pattern>"
+   echo "[Error] Usage ./$0 <pattern>"
    exit 1
 fi
 
