@@ -1,8 +1,9 @@
-# Linux-Monitor
-by Mem-Oo
+# Shell_scripts
+by mogamal
 
 
-A Shell Script to Monitor Network, Disk Usage, Uptime, Load Average and RAM usage in Linux.
+A Shell Scripts to Monitor Network, Disk Usage, Uptime, Load Average and RAM usage in Linux.
+and more 
 
 USAGE
 
