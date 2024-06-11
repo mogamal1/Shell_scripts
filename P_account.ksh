@@ -4,6 +4,7 @@
 
 #============================================================================================
 # VARs
+pttrn=$1
 desired_size=$((($2+800/2)/800))
 user_id=$3
 grp_id=$4
@@ -41,7 +42,7 @@ for i in {0..7}; do
     echo "[Warning] Port $port already exists, it will be hashed"
     sed -i "/$port\/tcp/s/^/# /" /etc/services
   fi
-  echo "${port}_${service}            ${port}/tcp" >> /etc/services
+  echo "${pttrn}_${service}            ${port}/tcp" >> /etc/services
 done
 echo "### end of automation ###"                   >> /etc/services
 
