@@ -10,7 +10,7 @@ grp_id=$4
 f_port=$5
 vg_list=$(vgdisplay -c | cut -d':' -f1)
 lv_name="lv$1"
-services=("tomcat" "apache" "apache" "apache" "apache" "apache" "apache" "tomcat")
+services=("tomcat_http" "tomcat_shut" "mq" "websphere_http" "websphere_jsp" "client" "broadcast" "rfnfy")
 
 
 #============================================================================================
