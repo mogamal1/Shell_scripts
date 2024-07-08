@@ -1,6 +1,7 @@
 #!/usr/bin/ksh
 ## Libraries creation script
 ### Belal Koura SSNC 
+### Version 3
 
 #============================================================================================
 # VARs
@@ -53,17 +54,18 @@ done
 # Verification steps 
 if lvdisplay /dev/"$vg_name"/"$lv_name" >/dev/null 2>&1 ; then
    echo "[INFO] Backing up /etc/fstab"
-   mkdir /$1
+   mkdir /$dir_name
    cpdate /etc/fstab
-   if [  `grep -cw $1 /etc/fstab` -eq 0 ] ; then
+   if [  `grep -cw $dir_name /etc/fstab` -eq 0 ] ; then
 cat << EOF >> /etc/fstab
-/dev/mapper/$vg_name-$lv_name              /dir_name                ext4    defaults        1 2
+/dev/mapper/$vg_name-$lv_name              /$dir_name                ext4    defaults        1 2
 EOF
 
    fi
    systemctl daemon-reload
-   mount /$1
-   chown ${usr_name}:${usr_name} /dir_name
-   df -h /$1
+   mount /$dir_name
+   chown ${usr_name}:${usr_name} /$dir_name
+   chmod g+ws /$dir_name
+   df -h /$dir_name
 
 fi
