@@ -3,9 +3,9 @@ by mogamal
 
 
 A Shell Scripts to Monitor Network, Disk Usage, Uptime, Load Average and RAM usage in Linux.
-and more 
+and more related to Unix and Splunk 
 
-USAGE
+## USAGE
 
 To execute the script please read its content, using in preference nano editor, and then
 
