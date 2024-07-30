@@ -1,10 +1,12 @@
 #!/bin/bash
 # CIS SCRIPT
-# VERSION 5
+# script designed for running in RHEL 
+# VERSION 6
+
 WDIR=$1
-if [[ `id -u` -ne 0  || -z $1 ]]
+if [[ `id -u` -ne 0  || -z $1 ||  -f /etc/redhat-release ]]
 then
-echo "[ERROR] Please run $0 /<etc> with root account"
+echo "[ERROR] Please run $0 /<etc> on Redhat RHEL with root account"
 exit 10
 fi
 # ==============================================================================================================
