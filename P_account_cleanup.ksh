@@ -2,7 +2,7 @@
 ## Account cleanup script
 ## script handle only one account cleanup 
 ### Belal Koura SSNC 
-## VERSION 2 
+## VERSION 3 
 #====================================================================================================
 # VARs
 pttrn=$1
@@ -66,6 +66,6 @@ systemctl daemon-reload
 if [ -e "/$pttrn" ]; then
    echo "[INFO] Listing and removing /${pttrn} directory"
    ls -lsd /$pttrn*
-   find / -name "${pttrn}*" -type l -exec rm -v {} \; 
+   find / -maxdepth 1 -name "${pttrn}*" -type l -exec rm -v {} \; 
    rm -rfv /$pttrn
 fi
