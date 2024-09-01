@@ -2,7 +2,7 @@
 ## Account cleanup script
 ## script handle only one account cleanup 
 ### Belal Koura SSNC 
-## VERSION 3 
+## VERSION 4  
 #====================================================================================================
 # VARs
 pttrn=$1
@@ -31,7 +31,7 @@ cpdate /etc/passwd
 # Removing entries containing '$pttrn' from /etc/passwd
 echo "[INFO] Removing '$pttrn' entries from /etc/passwd"
 awk -F: '/$pttrn/ {print $1}' /etc/passwd | xargs -I {} userdel {}
-sed -i "/$pttrn/d" /etc/passwd
+sed -i "/^$pttrn/d" /etc/passwd
 
 # Backup /etc/group with date and minutes
 echo "[INFO] Backing up /etc/group"
@@ -39,7 +39,10 @@ cpdate /etc/group
 
 # Removing entries containing '$pttrn' from /etc/group
 echo "[INFO] Removing '$pttrn' entries from /etc/group"
-sed -i "/$pttrn/d" /etc/group
+sed -i "/^mqm:/s/$pttrn,//;/^mqm:/s/,$pttrn//" /etc/group
+# Printing mqm group 
+echo "[INFO] Printing existing users under 'mqm' group "
+grep mqm /etc/group
 
 # Backup /etc/services with date and minutes
 echo "[INFO] Backing up /etc/services"
@@ -47,7 +50,7 @@ cpdate /etc/services
 
 # Removing entries containing '$pttrn' from /etc/services
 echo "[INFO] Removing '$pttrn' entries from /etc/services"
-sed -i "/$pttrn/d" /etc/services
+sed -i "/^$pttrn/d" /etc/services
 #====================================================================================================
 # Check if /$pttrn is mounted and unmount it
 echo "[INFO] Unmounting Logical Volume ${lv_name}"
