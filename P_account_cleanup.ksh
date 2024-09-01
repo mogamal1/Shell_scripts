@@ -18,7 +18,7 @@ fi
 echo "${lv_name}"
 echo -n "Are you sure you want to remove logical volumes? (y/n)" 
 read confirmation
-if [[ ! "$confirmation" =~ ^[Yy]$ ]]; then
+if [[ ! "$confirmation" =~ ^[Yy] ]]; then
    echo "[INFO] Aborted by user."
    exit 2
 fi
