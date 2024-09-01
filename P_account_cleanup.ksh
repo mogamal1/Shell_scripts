@@ -12,11 +12,12 @@ lv_name=$(lvdisplay -c|awk -F: -v x="$lv_ptrrn" '$1 ~ x {print $1}')
 #====================================================================================================
 if [[ $EUID -eq 0 && -z "$1" ]]; then
    echo "[ERROR] Please run $0 <Account pattern> as root ... EXIT"
-   exit 1 
+   echo "[INFO] Usage $0 <pattern to be removed>"
+   exit 1
 fi
 
 echo "${lv_name}"
-echo -n "Are you sure you want to remove logical volumes? (y/n)" 
+echo -n "Are you sure you want to remove the above logical volumes? (y/n)" 
 read confirmation
 if [[ ! "$confirmation" =~ ^[Yy] ]]; then
    echo "[INFO] Aborted by user."
