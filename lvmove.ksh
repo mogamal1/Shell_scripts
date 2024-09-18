@@ -19,6 +19,7 @@ if [[ -z "$1" || $EUID -ne 0 ]]; then
    echo "[INFO] Usage $0 <pattern>"
    exit 1
 fi
+
 #====================================================================================================
 ## Max_VG Not the same VG and Max_free not zero  
 if (( `echo "$lv_size > $max_free || $max_free == 0" | bc -l` )) || [ "$lv_vg" == "$max_vg" ] ; then
@@ -28,16 +29,18 @@ exit 2
 
 fi
 
-
+#====================================================================================================
 umount /$1 2> /dev/null 
 lvcreate -L ${lv_size}G --name $lv_name $max_vg 
 dd if=/dev/${lv_vg}/${lv_name} of=/dev/${max_vg}/${lv_name}  bs=1024K conv=noerror,sync status=progress && lvremove /dev/${lv_vg}/${lv_name}
 
 #====================================================================================================
 if lvs /dev/${max_vg}/${lv_name} >/dev/null 2>&1 ; then
+   if grep -q "$lv_name" /etc/fstab; then
    cpdate /etc/fstab
    sed -i "s/$lv_vg/$max_vg/g" /etc/fstab
    systemctl daemon-reload
    mount /$1
+   fi 
 fi
 
