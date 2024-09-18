@@ -1,8 +1,7 @@
 #!/usr/bin/ksh
 ## Lvmove script 
 ## Belal Koura SSNC
-## Units in Gigabytes  
-## Alpha Version 
+## Units in bytes  
 ## VERSION 2
 #====================================================================================================
 # VARs
