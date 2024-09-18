@@ -1,5 +1,5 @@
-#!/usr/bin/kshl
-## Lvmove scripe 
+#!/usr/bin/ksh
+## Lvmove script 
 ## Belal Koura SSNC
 ## Units in Gigabytes  
 ## Alpha Version 
@@ -31,8 +31,9 @@ fi
 
 #====================================================================================================
 umount /$1 2> /dev/null 
-lvcreate -L ${lv_size}G --name $lv_name $max_vg 
-dd if=/dev/${lv_vg}/${lv_name} of=/dev/${max_vg}/${lv_name}  bs=1024K conv=noerror,sync status=progress && lvremove /dev/${lv_vg}/${lv_name}
+lvcreate -L ${lv_size}G --name $lv_name $max_vg && \
+dd if=/dev/${lv_vg}/${lv_name} of=/dev/${max_vg}/${lv_name}  bs=1024K conv=noerror,sync status=progress && \
+lvremove /dev/${lv_vg}/${lv_name}
 
 #====================================================================================================
 if lvs /dev/${max_vg}/${lv_name} >/dev/null 2>&1 ; then
