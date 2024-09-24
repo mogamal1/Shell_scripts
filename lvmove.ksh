@@ -22,10 +22,10 @@ for arg in "$@"; do
         *)
             if [[ "$arg" =~ ^/dev/([^/]+)/([^/]+)$ ]]; then
                 lv_name=${arg##*/}
-				lv_vg=$(echo $arg|awk -F/ '{print $3}')
+		lv_vg=$(echo $arg|awk -F/ '{print $3}')
             else
                 lv_name=$(lvs --noheadings -o lv_name | awk -v lv="$arg" '!seen[$1]++ && $1 ~ lv {print $1}')
-				lv_vg=$(lvs --noheadings|awk -v lv="$lv_name" '!seen[$1]++ && $1==lv{print $2}')
+		lv_vg=$(lvs --noheadings|awk -v lv="$lv_name" '!seen[$1]++ && $1==lv{print $2}')
             fi
             ;;
     esac
@@ -71,7 +71,7 @@ if [[ "$dev_size" -lt 100 ]]; then
    
    elif [[ "$lv_vg" == "$max_vg" ]]; then 
 
-	echo "[INFO] volume group $lv_vg is the same as the maximum volume group"
+    echo "[INFO] volume group $lv_vg is the same as the maximum volume group"
     exit 99
 	
    fi
@@ -94,10 +94,10 @@ lvremove --${lvr_flag} /dev/${lv_vg}/${lv_name}
 #==============================================================================================================
 if lvs /dev/${max_vg}/${lv_name} >/dev/null 2>&1 ; then
    if grep -q "$lv_name" /etc/fstab; then
-    cp /etc/fstab{,_`date +%Y%m%d%H%M`}
-    sed -i "s/\/dev\/mapper\/${lv_vg}-${lv_name}/\/dev\/mapper\/${max_vg}-${lv_name}/g" /etc/fstab
-    systemctl daemon-reload &&\
-    echo "[INFO] fstab file updated. "
-    mount /dev/${max_vg}/${lv_name} 2> /dev/null
+     cp /etc/fstab{,_`date +%Y%m%d%H%M`}
+     sed -i "s/\/dev\/mapper\/${lv_vg}-${lv_name}/\/dev\/mapper\/${max_vg}-${lv_name}/g" /etc/fstab
+     systemctl daemon-reload &&\
+     echo "[INFO] fstab file updated. "
+     mount /dev/${max_vg}/${lv_name} 2> /dev/null
    fi
 fi
