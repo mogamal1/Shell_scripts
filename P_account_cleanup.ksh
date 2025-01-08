@@ -31,7 +31,7 @@ cpdate /etc/passwd
 
 # Removing entries containing '$pttrn' from /etc/passwd
 echo "[INFO] Removing '$pttrn' entries from /etc/passwd"
-awk -F: -v pattern="bcud" '$1 ~ pattern {print $1}' /etc/passwd|xargs -I {} echo User {} will be deleted ...
+awk -F: -v pattern="$pttrn" '$1 ~ pattern {print $1}' /etc/passwd|xargs -I {} echo User {} will be deleted ...
 awk -F: -v pattern="$pttrn" '$1 ~ pattern {print $1}' /etc/passwd | xargs -I {} userdel {}
 #sed -i "/^$pttrn/d" /etc/passwd
 
