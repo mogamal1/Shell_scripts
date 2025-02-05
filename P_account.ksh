@@ -1,6 +1,7 @@
 #!/usr/bin/ksh
 ## Account creation script
 ### Belal Koura SSNC 
+### Version 3
 
 #============================================================================================
 # VARs
