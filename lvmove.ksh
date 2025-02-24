@@ -7,8 +7,8 @@
 # Pre-checks
 if [[ -z "$1" || $EUID -ne 0 ]]; then
    echo "[INFO] Usage $0 [OPTION] <lv_name|pattern>"
-   echo "OPTIONS"
-   echo " -f,  Override various checks, confirmations, and protections.  Use with extreme caution."
+   echo "[INFO] OPTIONS"
+   echo "[INFO] -f,  Override various checks, confirmations, and protections.  Use with extreme caution."
    exit 1
 fi
 
