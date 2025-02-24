@@ -33,6 +33,11 @@ for arg in "$@"; do
     esac
 done
 
+if [[ -z "$lv_name" ]]; then
+    echo "[ERROR] Logical Volume (LV) name is empty or invalid system. Please run on LVM setup"
+    exit 1
+fi
+
 lv_size=$(lvs --noheadings --nosuffix --units B|grep $lv_name|awk 'NR==1{print $4}') ## Size in Bytes
 max_free=$(vgs --noheadings -o vg_free --units B --sort vg_free --nosuffix|awk 'END{print $1}') ## Size in Bytes
 max_vg=$(vgs --noheadings -o vg_name --sort vg_free|awk 'END{print $1}')
@@ -41,7 +46,7 @@ completion_file="/usr/share/bash-completion/completions/lvmove"
 install_file="/sbin/lvmove"
 
 #==============================================================================================================
-if [[ ! -f "$completion_file" && ! -f "$install_file" ]]; then
+if [[ ! -f "$completion_file" || ! -f "$install_file" ]]; then
 echo "[INFO] Creating Bash completion file for lvmove"
 
 cat << EOF > $completion_file
