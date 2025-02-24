@@ -2,11 +2,13 @@
 ## Lvmove script
 ## Belal Koura SSNC
 ## Units in bytes
-## VERSION 7
+## VERSION 8
 #==============================================================================================================
 # Pre-checks
 if [[ -z "$1" || $EUID -ne 0 ]]; then
-   echo "[INFO] Usage $0 <lv_name|pattern>"
+   echo "[INFO] Usage $0 [OPTION] <lv_name|pattern>"
+   echo "OPTIONS"
+   echo " -f,  Override various checks, confirmations, and protections.  Use with extreme caution."
    exit 1
 fi
 
@@ -56,7 +58,7 @@ EOF
 chmod 644 "$completion_file"
 cp "$0" "$install_file" &&\
 chmod +x "$install_file" &&\
-echo "[INFO] $0 installed as lvmove, please rerun it as lvmove <lv_name|pattern>"
+echo "[INFO] $0 installed as lvmove tool, please rerun it as a command --> lvmove [OPTION] <lv_name|pattern>"
 exit 30
 fi
 
