@@ -134,6 +134,7 @@ lvremove --${lvr_flag} /dev/${lv_vg}/${lv_name}
 ## updating fstab file with new lv location
 if lvs /dev/${max_vg}/${lv_name} >/dev/null 2>&1 ; then
    if grep -q "$lv_name" /etc/fstab; then
+     echo "[INFO] Backing up /etc/fstab"
      cp /etc/fstab{,_`date +%Y%m%d%H%M`}
      sed -i "s/\/dev\/mapper\/${lv_vg}-${lv_name}/\/dev\/mapper\/${max_vg}-${lv_name}/g" /etc/fstab
      systemctl daemon-reload &&\
