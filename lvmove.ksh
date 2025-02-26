@@ -127,7 +127,7 @@ yesno "[INFO] LV /dev/${lv_vg}/${lv_name} will be moved to /dev/${max_vg}/${lv_n
 
 lvcreate -L ${lv_size}B --name $lv_name $max_vg &&\
 echo "[INFO] Please wait while copying $lv_name data to $max_vg ..." &&\
-dd if=/dev/${lv_vg}/${lv_name} of=/dev/${max_vg}/${lv_name}  bs=1024K conv=noerror,sync status=progress &&\
+dd if=/dev/${lv_vg}/${lv_name} of=/dev/${max_vg}/${lv_name}  bs=4M conv=noerror,sync status=progress &&\
 lvremove --${lvr_flag} /dev/${lv_vg}/${lv_name}
 
 #==============================================================================================================
