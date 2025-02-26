@@ -1,5 +1,7 @@
 #!/usr/bin/ksh
-## Lvmove script
+## Lvmove script from volume group to another volume group with max. free space
+## No downtime needed for Volume group 
+## In case maintaince window, you can use vgmerge as mentioned here --> https://access.redhat.com/solutions/3589831
 ## Belal Koura SSNC
 ## Units in bytes
 ## VERSION 9
