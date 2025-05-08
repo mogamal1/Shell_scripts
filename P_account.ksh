@@ -1,10 +1,11 @@
 #!/usr/bin/ksh
 ## Account creation script
 ### Belal Koura SSNC 
-### Version 4
+### Version 5
 #=============================================================================================
 # Set strict error handling
 set -euo pipefail
+export LVM_SUPPRESS_FD_WARNINGS=1
 
 # Global variables
 pttrn=$1
@@ -28,26 +29,28 @@ log_message() {
 #=============================================================================================
 # Function to check input validation
 validate_inputs() {
-    if ! [[ "$input_size" =~ ^[0-9]+[Gg]?$ ]]; then
-        log_message "[ERROR] Invalid size: '$input_size'. Use '1234' (SR) or '123G' (GB)."
-        exit 1
-    fi
 
     if [[ "$input_size" =~ [Gg]$ ]]; then
         desired_size=${input_size%[Gg]}
     else
         desired_size=$((($input_size + 800 / 2) / 800))  # Convert SR to GB
     fi
-	
-	if [[ -z "$pttrn" || "$desired_size" -le 0 || -z "$f_port" || "$(id -u)" -ne 0 || `grep -q "^.*:x:$user_id:" /etc/passwd; echo $?` -eq 0 || `grep -q "^.*:x:$grp_id:" /etc/group; echo $?` -eq 0 ]]; then
+
+        if [[ -z "$pttrn" || "$desired_size" -le 0 || -z "$f_port" || "$(id -u)" -ne 0 || `grep -q "^.*:x:$user_id:" /etc/passwd; echo $?` -eq 0 || `grep -q "^.*:x:$grp_id:" /etc/group; echo $?` -eq 0 ]]; then
         log_message "[ERROR] Please check script inputs and UID/GID"
         log_message "[INFO] Usage $0 <pattern> <size in SR|size in G> <UID> <GUID> <First_PORT>"
         exit 1
     fi
-	
-	log_message "[INFO] Account size is ${desired_size}G"
-	log_message "[INFO] Starting account creation in 5 seconds..."
-	sleep 5
+
+        if ! [[ "$input_size" =~ ^[0-9]+[Gg]?$ ]]; then
+        log_message "[ERROR] Invalid size: '$input_size'. Use '1234' (SR) or '123G' (GB)."
+        exit 1
+    fi
+
+    
+        log_message "[INFO] Account size is ${desired_size}G"
+        log_message "[INFO] Starting account creation in 5 seconds..."
+        sleep 5
 }
 
 #=============================================================================================
@@ -67,9 +70,9 @@ update_services() {
             log_message "[Warning] Port $port already exists."
         else
             printf '%-32s %s\n' "$label" "${port}/tcp" >> /etc/services
-			log_message "[DEBUG] Mapped $label to $port/tcp"
-		fi
-		
+                        log_message "[DEBUG] Mapped $label to $port/tcp"
+                fi
+
     done
 }
 
@@ -87,10 +90,10 @@ add_groups_to_services() {
         read gid?"Enter GID for group ${pttrn}grp${g}: "
         read grp_port?"Enter starting port for group ${pttrn}grp${g}: "
 
-    if grep -q "^.*:x:$gid:" /etc/group; then	
+    if grep -q "^.*:x:$gid:" /etc/group; then
         log_message "[WARNING] GID $gid exists (will be reused)"
     fi
-	
+
         for i in "${!services[@]}"; do
             port=$((grp_port + i))
             service=${services[i]}
@@ -98,9 +101,9 @@ add_groups_to_services() {
 
             if grep -q "$port/tcp" /etc/services; then
                 log_message "[Warning] ${pttrn}grp${g} Port $port already exists."
-			else
+                        else
                 printf '%-32s %s\n' "$label" "${port}/tcp" >> /etc/services
-		    fi
+                    fi
         done
         echo "#" >> /etc/services
     done
@@ -116,7 +119,7 @@ create_lv() {
             if [ `echo "$free_space > $desired_size" | bc` -eq 1 ]; then
                 log_message "[INFO] Selected VG: $vg_name (Free space: ${free_space}G) meets the criteria."
                 log_message "[INFO] Creating LV $lv_name with size ${desired_size}G..."
-				selected_vg=$vg_name
+                                selected_vg=$vg_name
                 lvcreate -L ${desired_size}G -n $lv_name $vg_name || { echo "[ERROR] LV creation failed"; exit 1; }
                 mkfs.ext4 -F /dev/$vg_name/$lv_name
                 break
@@ -138,11 +141,11 @@ setup_filesystem() {
         cpdate /etc/fstab
         if [ `grep -cw $pttrn /etc/fstab` -eq 0 ] ; then
             cat << EOF >> /etc/fstab
-/dev/mapper/$selected_vg-$lv_name              /$1                ext4    defaults        1 2
+/dev/mapper/$selected_vg-$lv_name              /$pttrn                ext4    defaults        1 2
 EOF
         fi
         mount "/$pttrn" || { log_message "[ERROR] Mount failed"; return 1; }
-		#chown "$user_id:$grp_id" "/$pttrn"
+                #chown "$user_id:$grp_id" "/$pttrn"
         df -h "/$pttrn" | tee -a "$LOG_FILE"
     fi
 }
