@@ -4,9 +4,12 @@
 ## In case maintaince window, you can use vgmerge as mentioned here --> https://access.redhat.com/solutions/3589831
 ## Belal Koura SSNC
 ## Units in bytes
-## VERSION 9
-set -x
+## VERSION 10 (For dev. only) 
+#set -x 
 #==============================================================================================================
+#VARS
+export LVM_SUPPRESS_FD_WARNINGS=1
+
 # Pre-checks
 if [[ -z "$1" || $EUID -ne 0 ]]; then
    echo "[INFO] Usage $0 [OPTION] <lv_name|pattern>"
@@ -20,7 +23,7 @@ fi
 # Functions
 
 yesno() {
-  local MSG="$1"
+  typeset MSG="$1"
 
   while [ 1 ]; do
     echo -n "$MSG [y|n] ? ";
@@ -44,7 +47,7 @@ yesno() {
 
 #==============================================================================================================
 # VARs
-lvr_flag=nohints
+lvr_flag=''
 
 for arg in "$@"; do
     case "$arg" in
@@ -84,7 +87,7 @@ cat << EOF > $completion_file
 _lvmove()
 {
 
-    local cur_word="\${COMP_WORDS[COMP_CWORD]}"
+    typeset cur_word="\${COMP_WORDS[COMP_CWORD]}"
     COMPREPLY=(\$(compgen -W "\$(lvscan 2>/dev/null|sed -n -e "s|^.*'\(.*\)'.*$|\1|p")" -- "\$cur_word"))
 } &&
 complete -F _lvmove lvmove
@@ -139,8 +142,9 @@ if lvs /dev/${max_vg}/${lv_name} >/dev/null 2>&1 ; then
      echo "[INFO] Backing up /etc/fstab"
      cp /etc/fstab{,_`date +%Y%m%d%H%M`}
      sed -i "s/\/dev\/mapper\/${lv_vg}-${lv_name}/\/dev\/mapper\/${max_vg}-${lv_name}/g" /etc/fstab
-     systemctl daemon-reload &&\
+	 #systemctl daemon-reload &&\
      echo "[INFO] fstab file updated. "
+     echo "[SUCCESS] Migration completed"
      mount /dev/${max_vg}/${lv_name} 2> /dev/null
    fi
 fi
