@@ -1,7 +1,7 @@
 #!/usr/bin/ksh
 ## Account creation script
 ### Belal Koura SSNC 
-### Version 5
+### Version 5.2
 #=============================================================================================
 # Set strict error handling
 set -euo pipefail
