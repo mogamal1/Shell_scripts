@@ -120,7 +120,7 @@ create_lv() {
                 log_message "[INFO] Selected VG: $vg_name (Free space: ${free_space}G) meets the criteria."
                 log_message "[INFO] Creating LV $lv_name with size ${desired_size}G..."
                                 selected_vg=$vg_name
-                lvcreate -L ${desired_size}G -n $lv_name $vg_name || { echo "[ERROR] LV creation failed"; exit 1; }
+                lvcreate -L ${desired_size}G -n $lv_name $vg_name || { log_message "[ERROR] LV creation failed"; exit 1; }
                 mkfs.ext4 -F /dev/$vg_name/$lv_name
                 break
             else
