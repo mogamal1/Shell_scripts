@@ -1,10 +1,10 @@
 #!/usr/bin/ksh
 ## Account creation script
 ### Belal Koura SSNC 
-### Version 5.2
+### Version 5.3
 #=============================================================================================
 # Set strict error handling
-set -euo pipefail
+#set -euo pipefail
 export LVM_SUPPRESS_FD_WARNINGS=1
 
 # Global variables
@@ -156,12 +156,15 @@ EOF
 validate_inputs
 update_services
 add_groups_to_services
-log_message "[INFO] New added ports/services listed below:"
+log_message "[INFO] New added ports/services for $pttrn listed below:"
 grep "$pttrn" /etc/services | tee -a "$LOG_FILE"
 if create_lv; then
-    setup_filesystem
-    log_message "[SUCCESS] Account $pttrn created successfully"
+    if setup_filesystem ; then
+       log_message "[SUCCESS] Account $pttrn created successfully"
+    else 
+       log_message "[FAILED] mountpoint /$pttrn not created - Account creation incomplete"
+    fi 
 else
-    log_message "[FAILED] Account creation incomplete"
+    log_message "[FAILED] cannot create LV lv$pttrn - Account creation incomplete"
     exit 1
 fi
