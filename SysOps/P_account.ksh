@@ -1,7 +1,7 @@
 #!/usr/bin/ksh
 ## Account creation script
 ### Belal Koura SSNC 
-### Version 5.3
+### Version 5.4
 #=============================================================================================
 # Set strict error handling
 #set -euo pipefail
@@ -72,7 +72,7 @@ update_services() {
             printf '%-32s %s\n' "$label" "${port}/tcp" >> /etc/services
                         log_message "[DEBUG] Mapped $label to $port/tcp"
                 fi
-
+        echo "#" >> /etc/services
     done
 }
 
@@ -90,9 +90,9 @@ add_groups_to_services() {
         read gid?"Enter GID for group ${pttrn}grp${g}: "
         read grp_port?"Enter starting port for group ${pttrn}grp${g}: "
 
-    if grep -q "^.*:x:$gid:" /etc/group; then
-        log_message "[WARNING] GID $gid exists (will be reused)"
-    fi
+        if grep -q "^.*:x:$gid:" /etc/group; then
+           log_message "[WARNING] GID $gid exists (will be reused)"
+        fi
 
         for i in "${!services[@]}"; do
             port=$((grp_port + i))
