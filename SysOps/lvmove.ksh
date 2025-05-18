@@ -4,11 +4,13 @@
 ## In case maintaince window, you can use vgmerge as mentioned here --> https://access.redhat.com/solutions/3589831
 ## Belal Koura SSNC
 ## Units in bytes
-## VERSION 10 (For dev. only) 
-#set -x 
+## VERSION 10.2 (For dev. only) 
+#set -x
 #==============================================================================================================
 #VARS
 export LVM_SUPPRESS_FD_WARNINGS=1
+lvr_flag=''
+lvc_flag=quiet
 
 # Pre-checks
 if [[ -z "$1" || $EUID -ne 0 ]]; then
@@ -46,13 +48,11 @@ yesno() {
 }
 
 #==============================================================================================================
-# VARs
-lvr_flag=''
-
 for arg in "$@"; do
     case "$arg" in
         -f)
             lvr_flag=force
+            lvc_flag=yes
             ;;
         *)
             if [[ "$arg" =~ ^/dev/([^/]+)/([^/]+)$ ]]; then
@@ -130,7 +130,7 @@ umount -f /dev/${lv_vg}/${lv_name} 2> /dev/null
 
 yesno "[INFO] LV /dev/${lv_vg}/${lv_name} will be moved to /dev/${max_vg}/${lv_name} , Continue? (Y/N)"
 
-lvcreate -L ${lv_size}B --name $lv_name $max_vg &&\
+lvcreate -Wy --${lvc_flag} -L ${lv_size}B --name $lv_name $max_vg &&\
 echo "[INFO] Please wait while copying $lv_name data to $max_vg ..." &&\
 dd if=/dev/${lv_vg}/${lv_name} of=/dev/${max_vg}/${lv_name}  bs=4M conv=noerror,sync status=progress &&\
 lvremove --${lvr_flag} /dev/${lv_vg}/${lv_name}
@@ -142,7 +142,7 @@ if lvs /dev/${max_vg}/${lv_name} >/dev/null 2>&1 ; then
      echo "[INFO] Backing up /etc/fstab"
      cp /etc/fstab{,_`date +%Y%m%d%H%M`}
      sed -i "s/\/dev\/mapper\/${lv_vg}-${lv_name}/\/dev\/mapper\/${max_vg}-${lv_name}/g" /etc/fstab
-	 #systemctl daemon-reload &&\
+         #systemctl daemon-reload &&\
      echo "[INFO] fstab file updated. "
      echo "[SUCCESS] Migration completed"
      mount /dev/${max_vg}/${lv_name} 2> /dev/null
