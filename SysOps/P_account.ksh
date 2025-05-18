@@ -1,7 +1,7 @@
 #!/usr/bin/ksh
 ## Account creation script
 ### Belal Koura SSNC 
-### Version 5.6
+### Version 5.61
 #=============================================================================================
 # Set strict error handling
 #set -euo pipefail
@@ -142,7 +142,7 @@ create_lv() {
 #=============================================================================================
 # Function to update /etc/fstab and mount the LV
 setup_filesystem() {
-    if [[ -n "$selected_vg" ]] && lvdisplay "/dev/$selected_vg/$lv_name" >/dev/null 2>&1 ; then
+    if [[ -n "$selected_vg" ]] && lvs "/dev/$selected_vg/$lv_name" &>/dev/null ; then
         log_message "[INFO] Backing up /etc/fstab"
         mkdir -p "/$pttrn" || { log_message "[ERROR] Cannot create /$pttrn"; return 1; }
         cpdate /etc/fstab
