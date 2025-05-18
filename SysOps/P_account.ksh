@@ -1,7 +1,7 @@
 #!/usr/bin/ksh
 ## Account creation script
 ### Belal Koura SSNC 
-### Version 5.4
+### Version 5.6
 #=============================================================================================
 # Set strict error handling
 #set -euo pipefail
@@ -36,17 +36,21 @@ validate_inputs() {
         desired_size=$((($input_size + 800 / 2) / 800))  # Convert SR to GB
     fi
 
-        if [[ -z "$pttrn" || "$desired_size" -le 0 || -z "$f_port" || "$(id -u)" -ne 0 || `grep -q "^.*:x:$user_id:" /etc/passwd; echo $?` -eq 0 || `grep -q "^.*:x:$grp_id:" /etc/group; echo $?` -eq 0 ]]; then
+    if [[ -z "$pttrn" || "$desired_size" -le 0 || -z "$f_port" || "$(id -u)" -ne 0 || `grep -q "^.*:x:$user_id:" /etc/passwd; echo $?` -eq 0 || `grep -q "^.*:x:$grp_id:" /etc/group; echo $?` -eq 0 ]]; then
         log_message "[ERROR] Please check script inputs and UID/GID"
         log_message "[INFO] Usage $0 <pattern> <size in SR|size in G> <UID> <GUID> <First_PORT>"
         exit 1
     fi
 
-        if ! [[ "$input_size" =~ ^[0-9]+[Gg]?$ ]]; then
+    if ! [[ "$input_size" =~ ^[0-9]+[Gg]?$ ]]; then
         log_message "[ERROR] Invalid size: '$input_size'. Use '1234' (SR) or '123G' (GB)."
         exit 1
     fi
 
+    if [ -d "/${pttrn}" ]; then
+        log_message "[ERROR] Pattern /${pttrn} already exists"
+        exit 1
+    fi
     
         log_message "[INFO] Account size is ${desired_size}G"
         log_message "[INFO] Starting account creation in 5 seconds..."
@@ -119,10 +123,10 @@ create_lv() {
             if [ `echo "$free_space > $desired_size" | bc` -eq 1 ]; then
                 log_message "[INFO] Selected VG: $vg_name (Free space: ${free_space}G) meets the criteria."
                 log_message "[INFO] Creating LV $lv_name with size ${desired_size}G..."
-                                selected_vg=$vg_name
+                selected_vg=$vg_name
                 lvcreate -Wy --yes -L ${desired_size}G -n $lv_name $vg_name || { log_message "[ERROR] LV creation failed"; exit 1; }
                 mkfs.ext4 -F /dev/$vg_name/$lv_name
-                break
+                return 0
             else
                 log_message "[Warning] VG $vg_name does not have sufficient free space. Trying the next one..."
             fi
@@ -130,6 +134,9 @@ create_lv() {
             log_message "[ERROR] Unable to retrieve free space information for VG $vg_name."
         fi
     done
+
+    log_message "[ERROR] No VG found with sufficient free space (required: ${desired_size}G)"
+    return 1
 }
 
 #=============================================================================================
@@ -145,7 +152,6 @@ setup_filesystem() {
 EOF
         fi
         mount "/$pttrn" || { log_message "[ERROR] Mount failed"; return 1; }
-                #chown "$user_id:$grp_id" "/$pttrn"
         df -h "/$pttrn" | tee -a "$LOG_FILE"
     fi
 }
