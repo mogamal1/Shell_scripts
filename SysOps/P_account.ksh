@@ -1,7 +1,7 @@
 #!/usr/bin/ksh
 ## Account creation script
 ### Belal Koura SSNC 
-### Version 5.61
+### Version 5.62
 #=============================================================================================
 # Set strict error handling
 #set -euo pipefail
@@ -153,7 +153,9 @@ EOF
         fi
         mount "/$pttrn" || { log_message "[ERROR] Mount failed"; return 1; }
         df -h "/$pttrn" | tee -a "$LOG_FILE"
-    fi
+    else 
+        return 1
+    fi 
 }
 
 #=============================================================================================
