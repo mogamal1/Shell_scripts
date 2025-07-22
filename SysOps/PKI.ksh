@@ -1,13 +1,14 @@
 #!/usr/bin/ksh
 ### PKI Setup
 ### Belal Koura SSNC
-### Version 1.1
+### Version 1.2
 
 # -------------
 # Usage Check
 # -------------
 if [ -z "$1" ]; then
     echo "Usage: $0 <remote_host>"
+    echo "INFO: Oracle user used by default"
     exit 1
 fi
 
