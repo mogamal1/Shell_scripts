@@ -2,7 +2,7 @@
 ## Account cleanup script
 ## script handles only one account cleanup
 ### Belal Koura SSNC
-## VERSION 6.1
+## VERSION 6.11
 #====================================================================================================
 # VARs
 pttrn=$1
@@ -57,6 +57,8 @@ cpdate /etc/group
 # Removing entries containing '$pttrn' from /etc/group
 echo "[INFO] Removing '$pttrn' entries from /etc/group"
 sed -i "/^mqm:/s/$pttrn,//;/^mqm:/s/,$pttrn//" /etc/group
+groupdel tmgr${pttrn}
+
 # Printing mqm group
 echo "[INFO] Printing existing users under 'mqm' group "
 grep mqm /etc/group
