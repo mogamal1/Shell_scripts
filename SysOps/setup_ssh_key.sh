@@ -3,7 +3,8 @@
 # Usage: ./setup_ssh_key.sh <remote_user> <remote_host>
 # This script performs RSA key setup,
 # using SSH multiplexing.
-#
+# ## Belal Koura SSNC
+## VER 2.0 
 
 # --- Arguments ---
 if [ $# -ne 2 ]; then
