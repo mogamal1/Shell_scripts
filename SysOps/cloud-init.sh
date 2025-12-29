@@ -111,7 +111,8 @@ echo "INFO: Installing required packages"
 dnf -y install \
   ksh unzip tar wget tmux openssh-server sudo which net-tools \
   glibc glibc-devel libaio libaio-devel compat-libstdc++ \
-  gcc make lvm2 e2fsprogs util-linux coreutils
+  gcc make lvm2 e2fsprogs util-linux coreutils \
+  motif.i686 libXmu.i686 \motif.x86_64 libXmu.x86_64    ### adding new packages for SWTMX i686  
 
 systemctl enable --now sshd || true
 
