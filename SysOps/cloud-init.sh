@@ -2,7 +2,7 @@
 ###############################################################################
 # Cloud-init user-data script for Golden Image / First-Boot Provisioning
 # Belal Koura SSNC
-# VERSION="1.3"
+# VERSION="1.31"
 # ========================= PREREQUISITES  =====================================
 #
 # [A] Execution / cloud-init
